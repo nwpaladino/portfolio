@@ -822,6 +822,20 @@
     line-height: 1.4;
   }
 
+  /* ===== SLIDE 6: IMPACT AT SCALE ===== */
+  .scale-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-bottom: 48px;
+  }
+
+  .sector-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
   /* ===== SLIDE 7: PODCAST SHOWCASE ===== */
   .podcast-slide {
     background: var(--black);
@@ -1045,6 +1059,10 @@
     .podcast-grid { grid-template-columns: 1fr; }
     .brands-grid { grid-template-columns: repeat(2, 1fr); }
     .brands-grid-full { grid-template-columns: repeat(2, 1fr); }
+    .scale-stats-row { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .scale-stats-row > div { font-size: 14px; }
+    .scale-stats-row > div > div:first-child { font-size: 32px !important; }
+    .sector-cards-grid { grid-template-columns: 1fr; gap: 16px; }
     .brands-marquee { gap: 30px; }
     .brand-item.marquee { font-size: 22px; }
     .podcast-guests-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1440,7 +1458,7 @@
     </div>
 
     <!-- Aggregate scale stats -->
-    <div class="fade-in fade-in-delay-2" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-bottom: 48px;">
+    <div class="scale-stats-row fade-in fade-in-delay-2">
       <div style="border-left: 2px solid var(--black); padding: 20px 24px;">
         <div style="font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1;">$1.8T+</div>
         <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-500); margin-top: 8px; line-height: 1.5;">Combined Annual Revenue<br>of Brands Influenced</div>
@@ -1460,7 +1478,7 @@
     </div>
 
     <!-- Industry sector stats -->
-    <div class="fade-in fade-in-delay-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+    <div class="sector-cards-grid fade-in fade-in-delay-3">
       <div style="border: 1px solid var(--gray-200); padding: 28px 24px; transition: all 0.25s;" onmouseover="this.style.borderColor='var(--black)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gray-200)';this.style.transform='none'">
         <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--gray-400); margin-bottom: 14px;">Retail & E-Commerce</div>
         <div style="font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px;">$1.2T+</div>
