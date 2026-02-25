@@ -720,16 +720,20 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-// Load each section independently, hide sections with zero images
+// Lazy-load sections: first section loads immediately, rest load when scrolled near
 const sections = document.querySelectorAll('.gallery-section[data-section]');
 const allLoaded = []; // global ordered list for lightbox
-
 let sectionsResolved = 0;
 
-sections.forEach(section => {
+function loadSection(section) {
+  if (section.dataset.loading) return;
+  section.dataset.loading = 'true';
+
   const slots = Array.from(section.querySelectorAll('.gallery-item.pending'));
   const sectionLoaded = [];
   let resolved = 0;
+
+  if (slots.length === 0) { sectionDone(); return; }
 
   slots.forEach(slot => {
     const img = slot.querySelector('img');
@@ -741,50 +745,69 @@ sections.forEach(section => {
       slot.style.animationDelay = (sectionLoaded.length * 0.04) + 's';
       sectionLoaded.push(slot);
       resolved++;
-      if (resolved === slots.length) finalizeSection();
+      if (resolved === slots.length) sectionDone();
     };
 
     img.onerror = function () {
       slot.remove();
       resolved++;
-      if (resolved === slots.length) finalizeSection();
+      if (resolved === slots.length) sectionDone();
     };
 
     img.src = src;
   });
 
-  function finalizeSection() {
+  function sectionDone() {
     if (sectionLoaded.length === 0) {
       section.classList.add('empty-section');
     }
-    // Push to global list in order
     sectionLoaded.sort((a, b) => {
       return parseInt(a.dataset.src.match(/\d+/)[0]) - parseInt(b.dataset.src.match(/\d+/)[0]);
     });
     allLoaded.push(...sectionLoaded);
+    allLoaded.sort((a, b) => {
+      return parseInt(a.dataset.src.match(/\d+/)[0]) - parseInt(b.dataset.src.match(/\d+/)[0]);
+    });
 
     sectionsResolved++;
+    rebindLightbox();
     if (sectionsResolved === sections.length) finalizeAll();
   }
-});
+}
 
-function finalizeAll() {
+// Load first section right away
+loadSection(sections[0]);
+
+// Observe remaining sections — load when within 400px of viewport
+const lazyObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      loadSection(entry.target);
+      lazyObserver.unobserve(entry.target);
+    }
+  });
+}, { rootMargin: '400px 0px' });
+
+for (let i = 1; i < sections.length; i++) {
+  lazyObserver.observe(sections[i]);
+}
+
+function rebindLightbox() {
+  allLoaded.forEach((item, i) => {
+    item.onclick = () => { currentIndex = i; openLightbox(); };
+  });
   const badge = document.getElementById('countBadge');
-
   if (allLoaded.length > 0) {
     badge.textContent = allLoaded.length + ' Photo' + (allLoaded.length !== 1 ? 's' : '');
-  } else {
-    badge.textContent = 'Gallery';
+  }
+}
+
+function finalizeAll() {
+  if (allLoaded.length === 0) {
+    document.getElementById('countBadge').textContent = 'Gallery';
     document.getElementById('emptyWrap').style.display = '';
   }
-
-  // Wire up lightbox on all loaded items globally
-  allLoaded.forEach((item, i) => {
-    item.addEventListener('click', () => {
-      currentIndex = i;
-      openLightbox();
-    });
-  });
+  rebindLightbox();
 }
 
 // Lightbox
