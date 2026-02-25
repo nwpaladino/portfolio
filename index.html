@@ -343,6 +343,22 @@
     margin-top: 60px;
   }
 
+  a.tl-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  a.tl-link:hover {
+    transform: scale(1.05);
+  }
+
+  a.tl-link:hover .tl-company {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   .tl-company {
     font-size: 17px;
     font-weight: 800;
@@ -1160,101 +1176,101 @@
         <div class="tl-node" style="left: 8%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector above-conn" style="height: 90px;"></div>
-          <div class="tl-card above" style="bottom: 20px; margin-bottom: 70px;">
+          <a href="/newyorkfilmacademy" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 70px;">
             <div class="tl-origin-photo">
               <img src="images/nyfa.png" alt="Nick Paladino at New York Film Academy">
             </div>
             <div class="tl-company" style="margin-top: 8px;">New York<br>Film Academy</div>
             <div class="tl-role">Filmmaking</div>
-          </div>
+          </a>
         </div>
 
         <!-- Node 0b: University of Alabama -->
         <div class="tl-node" style="left: 18%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector below-conn"></div>
-          <div class="tl-card below" style="top: 20px; margin-top: 60px;">
+          <a href="/universityofalabama" class="tl-link tl-card below" style="top: 20px; margin-top: 60px;">
             <div class="tl-company">University of<br>Alabama</div>
             <div class="tl-role">B.S. Telecom & Film, Business</div>
-          </div>
+          </a>
         </div>
 
         <!-- Node 1: Best Buy -->
         <div class="tl-node" style="left: 28%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector above-conn"></div>
-          <div class="tl-card above" style="bottom: 20px; margin-bottom: 60px;">
+          <a href="/bestbuy" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 60px;">
             <div class="tl-company">Best Buy</div>
             <div class="tl-role">Manager</div>
-          </div>
+          </a>
         </div>
 
         <!-- Node 3: CoolJuice -->
         <div class="tl-node" style="left: 38%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector below-conn"></div>
-          <div class="tl-card below" style="top: 20px; margin-top: 60px;">
+          <a href="/cooljuice" class="tl-link tl-card below" style="top: 20px; margin-top: 60px;">
             <div class="tl-company">CoolJuice<br>Beverage Co.</div>
             <div class="tl-role">Manager</div>
-          </div>
+          </a>
         </div>
 
         <!-- Node 4: Morneau Shepell -->
         <div class="tl-node" style="left: 48%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector above-conn"></div>
-          <div class="tl-card above" style="bottom: 20px; margin-bottom: 60px;">
+          <a href="/morneaushepell" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 60px;">
             <div class="tl-company">Morneau Shepell</div>
             <div class="tl-role">Manager</div>
-          </div>
+          </a>
         </div>
 
         <!-- Node 5: The Home Depot -->
         <div class="tl-node" style="left: 58%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector below-conn" style="height: 90px;"></div>
-          <div class="tl-card below" style="top: 20px; margin-top: 70px;">
+          <a href="/thehomedepot" class="tl-link tl-card below" style="top: 20px; margin-top: 70px;">
             <div class="tl-company">The Home Depot</div>
             <div class="tl-location">Atlanta</div>
             <div class="tl-role">Product Manager</div>
-          </div>
+          </a>
         </div>
 
         <!-- Node 6: Coffee Woodworks -->
         <div class="tl-node" style="left: 68%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector above-conn"></div>
-          <div class="tl-card above" style="bottom: 20px; margin-bottom: 60px;">
+          <a href="/coffeewoodworks" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 60px;">
             <div class="tl-company">Coffee Woodworks</div>
             <div class="tl-location">Side Venture</div>
             <div class="tl-role">Founder / Woodworker</div>
-          </div>
+          </a>
         </div>
 
         <!-- Node 7: Blue Triangle -->
         <div class="tl-node" style="left: 80%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector below-conn" style="height: 100px;"></div>
-          <div class="tl-card below" style="top: 20px; margin-top: 80px;">
+          <a href="/bluetriangle" class="tl-link tl-card below" style="top: 20px; margin-top: 80px;">
             <div class="tl-dates">Current</div>
             <div class="tl-company" style="font-size: 20px;">Blue Triangle</div>
             <div class="tl-location">Atlanta</div>
             <div class="tl-role">Distinguished Solutions Architect<br>& Digital Storyteller</div>
-          </div>
+          </a>
         </div>
 
         <!-- Node 8: Podcast with photo -->
         <div class="tl-node" style="left: 92%;">
           <div class="tl-dot" style="top: -6px;"></div>
           <div class="tl-connector above-conn" style="height: 90px;"></div>
-          <div class="tl-card above" style="bottom: 20px; margin-bottom: 70px;">
+          <a href="/thefrictionlessexperience" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 70px;">
             <div class="tl-origin-photo">
               <img src="images/tfe.png" alt="Nick Paladino recording The Frictionless Experience podcast">
             </div>
             <div class="tl-dates" style="margin-top: 8px;">2023 ></div>
             <div class="tl-company">The Frictionless<br>Experience</div>
             <div class="tl-role">Co-Host / Podcast</div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
