@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Woodworks — Nick Paladino</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #111111;
+    --white: #ffffff;
+    --gray-100: #f5f4f2;
+    --gray-200: #e8e6e3;
+    --gray-300: #d4d1cc;
+    --gray-400: #a8a49e;
+    --gray-500: #7a7672;
+    --gray-600: #4a4844;
+    --warm: #c9a96e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--gray-100);
+    color: var(--black);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== BACK NAV ===== */
+  .back-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(17,17,17,0.95) 0%, rgba(17,17,17,0.0) 100%);
+    pointer-events: none;
+  }
+
+  .back-nav a, .back-nav span { pointer-events: all; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--white); }
+  .back-link svg { width: 16px; height: 16px; transition: transform 0.2s; }
+  .back-link:hover svg { transform: translateX(-3px); }
+
+  .photo-count-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--black);
+    color: var(--white);
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    padding: 120px 60px 80px;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 200px;
+    background: linear-gradient(to top, var(--gray-100), transparent);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--warm);
+    margin-bottom: 24px;
+  }
+
+  .hero-title {
+    font-size: 72px;
+    font-weight: 900;
+    letter-spacing: -3px;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  .hero-pipe-block {
+    border-left: 3px solid rgba(255,255,255,0.25);
+    padding-left: 24px;
+    margin-top: 32px;
+  }
+
+  .hero-desc {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.7);
+    max-width: 560px;
+  }
+
+  /* ===== GALLERY SECTIONS ===== */
+  .gallery-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 60px;
+    background: var(--gray-100);
+  }
+
+  /* First section pulls up into hero gradient */
+  .gallery-section:first-of-type {
+    padding-top: 40px;
+    margin-top: -60px;
+  }
+
+  .gallery-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Dark theme sections */
+  .gallery-dark {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  .gallery-dark .gallery-number {
+    color: var(--white);
+  }
+
+  .gallery-dark .gallery-pipe {
+    background: var(--white);
+  }
+
+  .gallery-dark .gallery-title {
+    color: var(--white);
+  }
+
+  .gallery-dark .gallery-item {
+    background: #1a1a1a;
+  }
+
+  .gallery-dark .gallery-item img {
+    filter: grayscale(20%) contrast(1.05);
+  }
+
+  .gallery-dark .gallery-item:hover img {
+    filter: grayscale(0%) contrast(1.1);
+  }
+
+  /* Section transitions */
+  .gallery-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 120px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .gallery-dark::before {
+    background: linear-gradient(to bottom, var(--gray-100), var(--black));
+  }
+
+  .gallery-section:not(.gallery-dark) + .gallery-section:not(.gallery-dark)::before,
+  .gallery-section:first-of-type::before {
+    display: none;
+  }
+
+  .gallery-dark + .gallery-section:not(.gallery-dark)::before {
+    background: linear-gradient(to bottom, var(--black), var(--gray-100));
+  }
+
+  /* Hide sections with no loaded images */
+  .gallery-section.empty-section {
+    display: none;
+  }
+
+  .gallery-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .gallery-number {
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -3px;
+    color: var(--black);
+  }
+
+  .gallery-pipe {
+    width: 3px;
+    height: 60px;
+    background: var(--black);
+    flex-shrink: 0;
+  }
+
+  .gallery-title {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--black);
+  }
+
+  .gallery-grid {
+    columns: 3;
+    column-gap: 20px;
+  }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--gray-200);
+  }
+
+  .gallery-item.pending { display: none; }
+
+  .gallery-item img {
+    width: 100%;
+    display: block;
+    filter: grayscale(30%) contrast(1.02);
+    transition: filter 0.5s ease, transform 0.5s ease;
+  }
+
+  .gallery-item:hover img {
+    filter: grayscale(0%) contrast(1.05);
+    transform: scale(1.02);
+  }
+
+  .gallery-item-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 40px 20px 16px;
+    background: linear-gradient(to top, rgba(17,17,17,0.7) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+
+  .gallery-item-name {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+  }
+
+  @keyframes galleryReveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .gallery-item.loaded {
+    display: block;
+    animation: galleryReveal 0.6s ease forwards;
+  }
+
+  /* Empty state */
+  .gallery-empty {
+    text-align: center;
+    padding: 120px 40px;
+    border: 2px dashed var(--gray-300);
+    display: none;
+  }
+
+  .gallery-empty.show { display: block; }
+
+  .gallery-empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 24px;
+    color: var(--gray-400);
+  }
+
+  .gallery-empty h3 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+
+  .gallery-empty p {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.7;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .gallery-empty code {
+    display: inline-block;
+    margin-top: 16px;
+    background: var(--gray-200);
+    padding: 8px 16px;
+    font-size: 13px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--gray-600);
+    border-radius: 4px;
+  }
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(17,17,17,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .lightbox.active { display: flex; }
+
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    cursor: default;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 30px; right: 40px;
+    width: 40px; height: 40px;
+    background: none;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .lightbox-close:hover {
+    border-color: var(--white);
+    color: var(--white);
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    background: none;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.6);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .lightbox-nav:hover {
+    border-color: var(--white);
+    color: var(--white);
+  }
+
+  .lightbox-prev { left: 30px; }
+  .lightbox-next { right: 30px; }
+
+  .lightbox-counter {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ===== FOOTER ===== */
+  .page-footer {
+    text-align: center;
+    padding: 40px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-line {
+    width: 60px;
+    height: 2px;
+    background: var(--gray-300);
+    margin: 0 auto 20px;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.5px;
+  }
+
+  .footer-text a {
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-text a:hover { color: var(--black); }
+
+  /* ===== ANIMATIONS ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .fade-in-delay-1 { transition-delay: 0.1s; }
+  .fade-in-delay-2 { transition-delay: 0.2s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .back-nav { padding: 16px 24px; }
+    .hero { padding: 100px 30px 60px; min-height: 50vh; }
+    .hero-title { font-size: 42px; letter-spacing: -1.5px; }
+    .hero-desc { font-size: 15px; }
+    .gallery-section { padding: 80px 24px; }
+    .gallery-section:first-of-type { padding-top: 20px; margin-top: -40px; }
+    .gallery-grid { columns: 2; column-gap: 12px; }
+    .gallery-item { margin-bottom: 12px; }
+    .gallery-number { font-size: 48px; }
+    .gallery-title { font-size: 22px; }
+    .lightbox-prev { left: 10px; }
+    .lightbox-next { right: 10px; }
+  }
+
+  @media (max-width: 500px) {
+    .gallery-grid { columns: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- BACK NAV -->
+<div class="back-nav">
+  <a href="/" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Portfolio
+  </a>
+  <span class="photo-count-badge" id="countBadge"></span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label fade-in">Side Venture</div>
+    <h1 class="hero-title fade-in fade-in-delay-1">Coffee<br>Woodworks</h1>
+    <div class="hero-pipe-block fade-in fade-in-delay-2">
+      <p class="hero-desc">
+        Handcrafted woodwork born from a love of craft, coffee, and the beauty of raw materials.
+        Every piece is designed, built, and finished by hand — where sawdust meets espresso.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: The Work (1-25) -->
+<section class="gallery-section" data-section="01" id="section-01">
+  <div class="gallery-inner">
+    <div class="gallery-header fade-in">
+      <span class="gallery-number">01</span>
+      <span class="gallery-pipe"></span>
+      <div class="gallery-title">The Work</div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item pending" data-src="photos/1.jpg"><img alt="Photo 1"><div class="gallery-item-overlay"><div class="gallery-item-name">1</div></div></div>
+      <div class="gallery-item pending" data-src="photos/2.jpg"><img alt="Photo 2"><div class="gallery-item-overlay"><div class="gallery-item-name">2</div></div></div>
+      <div class="gallery-item pending" data-src="photos/3.jpg"><img alt="Photo 3"><div class="gallery-item-overlay"><div class="gallery-item-name">3</div></div></div>
+      <div class="gallery-item pending" data-src="photos/4.jpg"><img alt="Photo 4"><div class="gallery-item-overlay"><div class="gallery-item-name">4</div></div></div>
+      <div class="gallery-item pending" data-src="photos/5.jpg"><img alt="Photo 5"><div class="gallery-item-overlay"><div class="gallery-item-name">5</div></div></div>
+      <div class="gallery-item pending" data-src="photos/6.jpg"><img alt="Photo 6"><div class="gallery-item-overlay"><div class="gallery-item-name">6</div></div></div>
+      <div class="gallery-item pending" data-src="photos/7.jpg"><img alt="Photo 7"><div class="gallery-item-overlay"><div class="gallery-item-name">7</div></div></div>
+      <div class="gallery-item pending" data-src="photos/8.jpg"><img alt="Photo 8"><div class="gallery-item-overlay"><div class="gallery-item-name">8</div></div></div>
+      <div class="gallery-item pending" data-src="photos/9.jpg"><img alt="Photo 9"><div class="gallery-item-overlay"><div class="gallery-item-name">9</div></div></div>
+      <div class="gallery-item pending" data-src="photos/10.jpg"><img alt="Photo 10"><div class="gallery-item-overlay"><div class="gallery-item-name">10</div></div></div>
+      <div class="gallery-item pending" data-src="photos/11.jpg"><img alt="Photo 11"><div class="gallery-item-overlay"><div class="gallery-item-name">11</div></div></div>
+      <div class="gallery-item pending" data-src="photos/12.jpg"><img alt="Photo 12"><div class="gallery-item-overlay"><div class="gallery-item-name">12</div></div></div>
+      <div class="gallery-item pending" data-src="photos/13.jpg"><img alt="Photo 13"><div class="gallery-item-overlay"><div class="gallery-item-name">13</div></div></div>
+      <div class="gallery-item pending" data-src="photos/14.jpg"><img alt="Photo 14"><div class="gallery-item-overlay"><div class="gallery-item-name">14</div></div></div>
+      <div class="gallery-item pending" data-src="photos/15.jpg"><img alt="Photo 15"><div class="gallery-item-overlay"><div class="gallery-item-name">15</div></div></div>
+      <div class="gallery-item pending" data-src="photos/16.jpg"><img alt="Photo 16"><div class="gallery-item-overlay"><div class="gallery-item-name">16</div></div></div>
+      <div class="gallery-item pending" data-src="photos/17.jpg"><img alt="Photo 17"><div class="gallery-item-overlay"><div class="gallery-item-name">17</div></div></div>
+      <div class="gallery-item pending" data-src="photos/18.jpg"><img alt="Photo 18"><div class="gallery-item-overlay"><div class="gallery-item-name">18</div></div></div>
+      <div class="gallery-item pending" data-src="photos/19.jpg"><img alt="Photo 19"><div class="gallery-item-overlay"><div class="gallery-item-name">19</div></div></div>
+      <div class="gallery-item pending" data-src="photos/20.jpg"><img alt="Photo 20"><div class="gallery-item-overlay"><div class="gallery-item-name">20</div></div></div>
+      <div class="gallery-item pending" data-src="photos/21.jpg"><img alt="Photo 21"><div class="gallery-item-overlay"><div class="gallery-item-name">21</div></div></div>
+      <div class="gallery-item pending" data-src="photos/22.jpg"><img alt="Photo 22"><div class="gallery-item-overlay"><div class="gallery-item-name">22</div></div></div>
+      <div class="gallery-item pending" data-src="photos/23.jpg"><img alt="Photo 23"><div class="gallery-item-overlay"><div class="gallery-item-name">23</div></div></div>
+      <div class="gallery-item pending" data-src="photos/24.jpg"><img alt="Photo 24"><div class="gallery-item-overlay"><div class="gallery-item-name">24</div></div></div>
+      <div class="gallery-item pending" data-src="photos/25.jpg"><img alt="Photo 25"><div class="gallery-item-overlay"><div class="gallery-item-name">25</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: The Craft (26-50) -->
+<section class="gallery-section gallery-dark" data-section="02" id="section-02">
+  <div class="gallery-inner">
+    <div class="gallery-header fade-in">
+      <span class="gallery-number">02</span>
+      <span class="gallery-pipe"></span>
+      <div class="gallery-title">The Craft</div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item pending" data-src="photos/26.jpg"><img alt="Photo 26"><div class="gallery-item-overlay"><div class="gallery-item-name">26</div></div></div>
+      <div class="gallery-item pending" data-src="photos/27.jpg"><img alt="Photo 27"><div class="gallery-item-overlay"><div class="gallery-item-name">27</div></div></div>
+      <div class="gallery-item pending" data-src="photos/28.jpg"><img alt="Photo 28"><div class="gallery-item-overlay"><div class="gallery-item-name">28</div></div></div>
+      <div class="gallery-item pending" data-src="photos/29.jpg"><img alt="Photo 29"><div class="gallery-item-overlay"><div class="gallery-item-name">29</div></div></div>
+      <div class="gallery-item pending" data-src="photos/30.jpg"><img alt="Photo 30"><div class="gallery-item-overlay"><div class="gallery-item-name">30</div></div></div>
+      <div class="gallery-item pending" data-src="photos/31.jpg"><img alt="Photo 31"><div class="gallery-item-overlay"><div class="gallery-item-name">31</div></div></div>
+      <div class="gallery-item pending" data-src="photos/32.jpg"><img alt="Photo 32"><div class="gallery-item-overlay"><div class="gallery-item-name">32</div></div></div>
+      <div class="gallery-item pending" data-src="photos/33.jpg"><img alt="Photo 33"><div class="gallery-item-overlay"><div class="gallery-item-name">33</div></div></div>
+      <div class="gallery-item pending" data-src="photos/34.jpg"><img alt="Photo 34"><div class="gallery-item-overlay"><div class="gallery-item-name">34</div></div></div>
+      <div class="gallery-item pending" data-src="photos/35.jpg"><img alt="Photo 35"><div class="gallery-item-overlay"><div class="gallery-item-name">35</div></div></div>
+      <div class="gallery-item pending" data-src="photos/36.jpg"><img alt="Photo 36"><div class="gallery-item-overlay"><div class="gallery-item-name">36</div></div></div>
+      <div class="gallery-item pending" data-src="photos/37.jpg"><img alt="Photo 37"><div class="gallery-item-overlay"><div class="gallery-item-name">37</div></div></div>
+      <div class="gallery-item pending" data-src="photos/38.jpg"><img alt="Photo 38"><div class="gallery-item-overlay"><div class="gallery-item-name">38</div></div></div>
+      <div class="gallery-item pending" data-src="photos/39.jpg"><img alt="Photo 39"><div class="gallery-item-overlay"><div class="gallery-item-name">39</div></div></div>
+      <div class="gallery-item pending" data-src="photos/40.jpg"><img alt="Photo 40"><div class="gallery-item-overlay"><div class="gallery-item-name">40</div></div></div>
+      <div class="gallery-item pending" data-src="photos/41.jpg"><img alt="Photo 41"><div class="gallery-item-overlay"><div class="gallery-item-name">41</div></div></div>
+      <div class="gallery-item pending" data-src="photos/42.jpg"><img alt="Photo 42"><div class="gallery-item-overlay"><div class="gallery-item-name">42</div></div></div>
+      <div class="gallery-item pending" data-src="photos/43.jpg"><img alt="Photo 43"><div class="gallery-item-overlay"><div class="gallery-item-name">43</div></div></div>
+      <div class="gallery-item pending" data-src="photos/44.jpg"><img alt="Photo 44"><div class="gallery-item-overlay"><div class="gallery-item-name">44</div></div></div>
+      <div class="gallery-item pending" data-src="photos/45.jpg"><img alt="Photo 45"><div class="gallery-item-overlay"><div class="gallery-item-name">45</div></div></div>
+      <div class="gallery-item pending" data-src="photos/46.jpg"><img alt="Photo 46"><div class="gallery-item-overlay"><div class="gallery-item-name">46</div></div></div>
+      <div class="gallery-item pending" data-src="photos/47.jpg"><img alt="Photo 47"><div class="gallery-item-overlay"><div class="gallery-item-name">47</div></div></div>
+      <div class="gallery-item pending" data-src="photos/48.jpg"><img alt="Photo 48"><div class="gallery-item-overlay"><div class="gallery-item-name">48</div></div></div>
+      <div class="gallery-item pending" data-src="photos/49.jpg"><img alt="Photo 49"><div class="gallery-item-overlay"><div class="gallery-item-name">49</div></div></div>
+      <div class="gallery-item pending" data-src="photos/50.jpg"><img alt="Photo 50"><div class="gallery-item-overlay"><div class="gallery-item-name">50</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: The Details (51-75) -->
+<section class="gallery-section" data-section="03" id="section-03">
+  <div class="gallery-inner">
+    <div class="gallery-header fade-in">
+      <span class="gallery-number">03</span>
+      <span class="gallery-pipe"></span>
+      <div class="gallery-title">The Details</div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item pending" data-src="photos/51.jpg"><img alt="Photo 51"><div class="gallery-item-overlay"><div class="gallery-item-name">51</div></div></div>
+      <div class="gallery-item pending" data-src="photos/52.jpg"><img alt="Photo 52"><div class="gallery-item-overlay"><div class="gallery-item-name">52</div></div></div>
+      <div class="gallery-item pending" data-src="photos/53.jpg"><img alt="Photo 53"><div class="gallery-item-overlay"><div class="gallery-item-name">53</div></div></div>
+      <div class="gallery-item pending" data-src="photos/54.jpg"><img alt="Photo 54"><div class="gallery-item-overlay"><div class="gallery-item-name">54</div></div></div>
+      <div class="gallery-item pending" data-src="photos/55.jpg"><img alt="Photo 55"><div class="gallery-item-overlay"><div class="gallery-item-name">55</div></div></div>
+      <div class="gallery-item pending" data-src="photos/56.jpg"><img alt="Photo 56"><div class="gallery-item-overlay"><div class="gallery-item-name">56</div></div></div>
+      <div class="gallery-item pending" data-src="photos/57.jpg"><img alt="Photo 57"><div class="gallery-item-overlay"><div class="gallery-item-name">57</div></div></div>
+      <div class="gallery-item pending" data-src="photos/58.jpg"><img alt="Photo 58"><div class="gallery-item-overlay"><div class="gallery-item-name">58</div></div></div>
+      <div class="gallery-item pending" data-src="photos/59.jpg"><img alt="Photo 59"><div class="gallery-item-overlay"><div class="gallery-item-name">59</div></div></div>
+      <div class="gallery-item pending" data-src="photos/60.jpg"><img alt="Photo 60"><div class="gallery-item-overlay"><div class="gallery-item-name">60</div></div></div>
+      <div class="gallery-item pending" data-src="photos/61.jpg"><img alt="Photo 61"><div class="gallery-item-overlay"><div class="gallery-item-name">61</div></div></div>
+      <div class="gallery-item pending" data-src="photos/62.jpg"><img alt="Photo 62"><div class="gallery-item-overlay"><div class="gallery-item-name">62</div></div></div>
+      <div class="gallery-item pending" data-src="photos/63.jpg"><img alt="Photo 63"><div class="gallery-item-overlay"><div class="gallery-item-name">63</div></div></div>
+      <div class="gallery-item pending" data-src="photos/64.jpg"><img alt="Photo 64"><div class="gallery-item-overlay"><div class="gallery-item-name">64</div></div></div>
+      <div class="gallery-item pending" data-src="photos/65.jpg"><img alt="Photo 65"><div class="gallery-item-overlay"><div class="gallery-item-name">65</div></div></div>
+      <div class="gallery-item pending" data-src="photos/66.jpg"><img alt="Photo 66"><div class="gallery-item-overlay"><div class="gallery-item-name">66</div></div></div>
+      <div class="gallery-item pending" data-src="photos/67.jpg"><img alt="Photo 67"><div class="gallery-item-overlay"><div class="gallery-item-name">67</div></div></div>
+      <div class="gallery-item pending" data-src="photos/68.jpg"><img alt="Photo 68"><div class="gallery-item-overlay"><div class="gallery-item-name">68</div></div></div>
+      <div class="gallery-item pending" data-src="photos/69.jpg"><img alt="Photo 69"><div class="gallery-item-overlay"><div class="gallery-item-name">69</div></div></div>
+      <div class="gallery-item pending" data-src="photos/70.jpg"><img alt="Photo 70"><div class="gallery-item-overlay"><div class="gallery-item-name">70</div></div></div>
+      <div class="gallery-item pending" data-src="photos/71.jpg"><img alt="Photo 71"><div class="gallery-item-overlay"><div class="gallery-item-name">71</div></div></div>
+      <div class="gallery-item pending" data-src="photos/72.jpg"><img alt="Photo 72"><div class="gallery-item-overlay"><div class="gallery-item-name">72</div></div></div>
+      <div class="gallery-item pending" data-src="photos/73.jpg"><img alt="Photo 73"><div class="gallery-item-overlay"><div class="gallery-item-name">73</div></div></div>
+      <div class="gallery-item pending" data-src="photos/74.jpg"><img alt="Photo 74"><div class="gallery-item-overlay"><div class="gallery-item-name">74</div></div></div>
+      <div class="gallery-item pending" data-src="photos/75.jpg"><img alt="Photo 75"><div class="gallery-item-overlay"><div class="gallery-item-name">75</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: The Origin (76-100) -->
+<section class="gallery-section gallery-dark" data-section="04" id="section-04">
+  <div class="gallery-inner">
+    <div class="gallery-header fade-in">
+      <span class="gallery-number">04</span>
+      <span class="gallery-pipe"></span>
+      <div class="gallery-title">The Origin</div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item pending" data-src="photos/76.jpg"><img alt="Photo 76"><div class="gallery-item-overlay"><div class="gallery-item-name">76</div></div></div>
+      <div class="gallery-item pending" data-src="photos/77.jpg"><img alt="Photo 77"><div class="gallery-item-overlay"><div class="gallery-item-name">77</div></div></div>
+      <div class="gallery-item pending" data-src="photos/78.jpg"><img alt="Photo 78"><div class="gallery-item-overlay"><div class="gallery-item-name">78</div></div></div>
+      <div class="gallery-item pending" data-src="photos/79.jpg"><img alt="Photo 79"><div class="gallery-item-overlay"><div class="gallery-item-name">79</div></div></div>
+      <div class="gallery-item pending" data-src="photos/80.jpg"><img alt="Photo 80"><div class="gallery-item-overlay"><div class="gallery-item-name">80</div></div></div>
+      <div class="gallery-item pending" data-src="photos/81.jpg"><img alt="Photo 81"><div class="gallery-item-overlay"><div class="gallery-item-name">81</div></div></div>
+      <div class="gallery-item pending" data-src="photos/82.jpg"><img alt="Photo 82"><div class="gallery-item-overlay"><div class="gallery-item-name">82</div></div></div>
+      <div class="gallery-item pending" data-src="photos/83.jpg"><img alt="Photo 83"><div class="gallery-item-overlay"><div class="gallery-item-name">83</div></div></div>
+      <div class="gallery-item pending" data-src="photos/84.jpg"><img alt="Photo 84"><div class="gallery-item-overlay"><div class="gallery-item-name">84</div></div></div>
+      <div class="gallery-item pending" data-src="photos/85.jpg"><img alt="Photo 85"><div class="gallery-item-overlay"><div class="gallery-item-name">85</div></div></div>
+      <div class="gallery-item pending" data-src="photos/86.jpg"><img alt="Photo 86"><div class="gallery-item-overlay"><div class="gallery-item-name">86</div></div></div>
+      <div class="gallery-item pending" data-src="photos/87.jpg"><img alt="Photo 87"><div class="gallery-item-overlay"><div class="gallery-item-name">87</div></div></div>
+      <div class="gallery-item pending" data-src="photos/88.jpg"><img alt="Photo 88"><div class="gallery-item-overlay"><div class="gallery-item-name">88</div></div></div>
+      <div class="gallery-item pending" data-src="photos/89.jpg"><img alt="Photo 89"><div class="gallery-item-overlay"><div class="gallery-item-name">89</div></div></div>
+      <div class="gallery-item pending" data-src="photos/90.jpg"><img alt="Photo 90"><div class="gallery-item-overlay"><div class="gallery-item-name">90</div></div></div>
+      <div class="gallery-item pending" data-src="photos/91.jpg"><img alt="Photo 91"><div class="gallery-item-overlay"><div class="gallery-item-name">91</div></div></div>
+      <div class="gallery-item pending" data-src="photos/92.jpg"><img alt="Photo 92"><div class="gallery-item-overlay"><div class="gallery-item-name">92</div></div></div>
+      <div class="gallery-item pending" data-src="photos/93.jpg"><img alt="Photo 93"><div class="gallery-item-overlay"><div class="gallery-item-name">93</div></div></div>
+      <div class="gallery-item pending" data-src="photos/94.jpg"><img alt="Photo 94"><div class="gallery-item-overlay"><div class="gallery-item-name">94</div></div></div>
+      <div class="gallery-item pending" data-src="photos/95.jpg"><img alt="Photo 95"><div class="gallery-item-overlay"><div class="gallery-item-name">95</div></div></div>
+      <div class="gallery-item pending" data-src="photos/96.jpg"><img alt="Photo 96"><div class="gallery-item-overlay"><div class="gallery-item-name">96</div></div></div>
+      <div class="gallery-item pending" data-src="photos/97.jpg"><img alt="Photo 97"><div class="gallery-item-overlay"><div class="gallery-item-name">97</div></div></div>
+      <div class="gallery-item pending" data-src="photos/98.jpg"><img alt="Photo 98"><div class="gallery-item-overlay"><div class="gallery-item-name">98</div></div></div>
+      <div class="gallery-item pending" data-src="photos/99.jpg"><img alt="Photo 99"><div class="gallery-item-overlay"><div class="gallery-item-name">99</div></div></div>
+      <div class="gallery-item pending" data-src="photos/100.jpg"><img alt="Photo 100"><div class="gallery-item-overlay"><div class="gallery-item-name">100</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EMPTY STATE (only if zero images across all sections) -->
+<div class="gallery-section" id="emptyWrap" style="display:none;">
+  <div class="gallery-inner">
+    <div class="gallery-empty show">
+      <svg class="gallery-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <path d="M21 15l-5-5L5 21"/>
+      </svg>
+      <h3>No Photos Yet</h3>
+      <p>Drop images named <strong>1.jpg</strong> through <strong>100.jpg</strong> into the photos folder and they'll appear here automatically.</p>
+      <code>coffeewoodworks/photos/</code>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <div class="footer-line"></div>
+  <div class="footer-text">
+    Coffee Woodworks — <a href="/">Nick Paladino</a>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+  <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">&#x2039;</button>
+  <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">&#x203A;</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
+<script>
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Load each section independently, hide sections with zero images
+const sections = document.querySelectorAll('.gallery-section[data-section]');
+const allLoaded = []; // global ordered list for lightbox
+
+let sectionsResolved = 0;
+
+sections.forEach(section => {
+  const slots = Array.from(section.querySelectorAll('.gallery-item.pending'));
+  const sectionLoaded = [];
+  let resolved = 0;
+
+  slots.forEach(slot => {
+    const img = slot.querySelector('img');
+    const src = slot.dataset.src;
+
+    img.onload = function () {
+      slot.classList.remove('pending');
+      slot.classList.add('loaded');
+      slot.style.animationDelay = (sectionLoaded.length * 0.04) + 's';
+      sectionLoaded.push(slot);
+      resolved++;
+      if (resolved === slots.length) finalizeSection();
+    };
+
+    img.onerror = function () {
+      slot.remove();
+      resolved++;
+      if (resolved === slots.length) finalizeSection();
+    };
+
+    img.src = src;
+  });
+
+  function finalizeSection() {
+    if (sectionLoaded.length === 0) {
+      section.classList.add('empty-section');
+    }
+    // Push to global list in order
+    sectionLoaded.sort((a, b) => {
+      return parseInt(a.dataset.src.match(/\d+/)[0]) - parseInt(b.dataset.src.match(/\d+/)[0]);
+    });
+    allLoaded.push(...sectionLoaded);
+
+    sectionsResolved++;
+    if (sectionsResolved === sections.length) finalizeAll();
+  }
+});
+
+function finalizeAll() {
+  const badge = document.getElementById('countBadge');
+
+  if (allLoaded.length > 0) {
+    badge.textContent = allLoaded.length + ' Photo' + (allLoaded.length !== 1 ? 's' : '');
+  } else {
+    badge.textContent = 'Gallery';
+    document.getElementById('emptyWrap').style.display = '';
+  }
+
+  // Wire up lightbox on all loaded items globally
+  allLoaded.forEach((item, i) => {
+    item.addEventListener('click', () => {
+      currentIndex = i;
+      openLightbox();
+    });
+  });
+}
+
+// Lightbox
+let currentIndex = 0;
+
+function openLightbox() {
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lightboxImg');
+  const counter = document.getElementById('lightboxCounter');
+  img.src = allLoaded[currentIndex].querySelector('img').src;
+  counter.textContent = (currentIndex + 1) + ' / ' + allLoaded.length;
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function navLightbox(dir) {
+  currentIndex = (currentIndex + dir + allLoaded.length) % allLoaded.length;
+  openLightbox();
+}
+
+document.getElementById('lightbox').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeLightbox();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('lightbox').classList.contains('active')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') navLightbox(-1);
+  if (e.key === 'ArrowRight') navLightbox(1);
+});
+</script>
+
+</body>
+</html>
