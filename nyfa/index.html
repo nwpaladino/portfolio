@@ -159,7 +159,6 @@
     background: var(--gray-100);
   }
 
-  /* First section pulls up into hero gradient */
   .video-section:first-of-type {
     padding-top: 40px;
     margin-top: -60px;
@@ -190,6 +189,10 @@
     color: var(--white);
   }
 
+  .video-dark .section-desc {
+    color: rgba(255,255,255,0.5);
+  }
+
   /* Section transitions */
   .video-section::before {
     content: '';
@@ -217,7 +220,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-bottom: 40px;
+    margin-bottom: 12px;
   }
 
   .section-number {
@@ -242,12 +245,22 @@
     color: var(--black);
   }
 
+  .section-desc {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--gray-500);
+    max-width: 600px;
+    margin-bottom: 40px;
+    padding-left: 2px;
+  }
+
   /* ===== VIDEO EMBED ===== */
   .video-wrapper {
     position: relative;
     width: 100%;
     max-width: 960px;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     background: #000;
@@ -310,6 +323,7 @@
 
   .fade-in-delay-1 { transition-delay: 0.1s; }
   .fade-in-delay-2 { transition-delay: 0.2s; }
+  .fade-in-delay-3 { transition-delay: 0.3s; }
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 900px) {
@@ -321,6 +335,7 @@
     .video-section:first-of-type { padding-top: 20px; margin-top: -40px; }
     .section-number { font-size: 48px; }
     .section-title { font-size: 22px; }
+    .section-desc { font-size: 13px; }
   }
 </style>
 </head>
@@ -332,7 +347,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     Portfolio
   </a>
-  <span class="video-count-badge">4 Videos</span>
+  <span class="video-count-badge">7 Videos</span>
 </div>
 
 <!-- HERO -->
@@ -342,66 +357,115 @@
     <h1 class="hero-title fade-in fade-in-delay-1">New York<br>Film Academy</h1>
     <div class="hero-pipe-block fade-in fade-in-delay-2">
       <p class="hero-desc">
-        A look back at where the visual storytelling began — trained at the New York Film Academy,
-        these projects represent the foundation of narrative, composition, and audience empathy
-        that now drives everything I build. Four chapters of the filmmaking journey.
+        Before the digital experience work, there was film school. These early projects from the New York Film Academy 
+        are where I first learned to see — to frame a story, move a viewer, and think visually. 
+        They're student work, rough around the edges, but they're where the foundation was laid. Seven steps in learning to tell stories with a camera.
       </p>
     </div>
   </div>
 </section>
 
-<!-- SECTION 01: The Precision -->
+<!-- SECTION 01 -->
 <section class="video-section" id="section-01">
   <div class="video-inner">
     <div class="section-header fade-in">
       <span class="section-number">01</span>
       <span class="section-pipe"></span>
-      <div class="section-title">The Precision</div>
+      <div class="section-title">The Story</div>
     </div>
-    <div class="video-wrapper fade-in fade-in-delay-1">
-      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Precision" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <p class="section-desc fade-in fade-in-delay-1">Technically just an amalgamation of Animated Music Videos.  These tell as story of me and my wife through bringing together several animes into a unique delivery and ultimately a proposal.  While none of the visuals are uniquely mine, the edits create something that is a story told only by me. Bonus reaction video of the proposal: https://www.youtube.com/watch?v=OYIc-p9Xn80</p>
+    <div class="video-wrapper fade-in fade-in-delay-2">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Foundation" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
   </div>
 </section>
 
-<!-- SECTION 02: The Refinement -->
+<!-- SECTION 02 -->
 <section class="video-section video-dark" id="section-02">
   <div class="video-inner">
     <div class="section-header fade-in">
       <span class="section-number">02</span>
       <span class="section-pipe"></span>
-      <div class="section-title">The Refinement</div>
+      <div class="section-title">The Foundation</div>
     </div>
-    <div class="video-wrapper fade-in fade-in-delay-1">
-      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Refinement" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <p class="section-desc fade-in fade-in-delay-1">When the work started to feel like mine. Less imitation, more instinct — developing a visual point of view and learning that the best storytelling comes from having something to say.</p>
+    <div class="video-wrapper fade-in fade-in-delay-2">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Voice" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
   </div>
 </section>
 
-<!-- SECTION 03: The Complexity -->
+<!-- SECTION 03 -->
 <section class="video-section" id="section-03">
   <div class="video-inner">
     <div class="section-header fade-in">
       <span class="section-number">03</span>
       <span class="section-pipe"></span>
-      <div class="section-title">The Complexity</div>
+      <div class="section-title">The Narrative</div>
     </div>
-    <div class="video-wrapper fade-in fade-in-delay-1">
-      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Complexity" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <p class="section-desc fade-in fade-in-delay-1">Moving beyond exercises and into actual stories. Attempting to make the audience feel something specific — not always succeeding, but starting to understand what pulls a viewer through a scene.</p>
+    <div class="video-wrapper fade-in fade-in-delay-2">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Narrative" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
   </div>
 </section>
 
-<!-- SECTION 04: The Origin -->
+<!-- SECTION 04 -->
 <section class="video-section video-dark" id="section-04">
   <div class="video-inner">
     <div class="section-header fade-in">
       <span class="section-number">04</span>
       <span class="section-pipe"></span>
-      <div class="section-title">The Origin</div>
+      <div class="section-title">The Sequence</div>
     </div>
-    <div class="video-wrapper fade-in fade-in-delay-1">
-      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <p class="section-desc fade-in fade-in-delay-1">Shots are just photographs until you string them together. This is where editing clicked — learning that the cut between two images creates a meaning neither one has alone.</p>
+    <div class="video-wrapper fade-in fade-in-delay-2">
+      <iframe src="https://www.youtube.com/embed/ao4mIC_M8b0?si=Ry94udeVMJXdZpJr" title="The Sequence" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 05 -->
+<section class="video-section" id="section-05">
+  <div class="video-inner">
+    <div class="section-header fade-in">
+      <span class="section-number">05</span>
+      <span class="section-pipe"></span>
+      <div class="section-title">The Frame</div>
+    </div>
+    <p class="section-desc fade-in fade-in-delay-1">Figuring out that where you place the subject matters as much as the subject itself. Early experiments in composition — some worked, some didn't, all of them taught something.</p>
+    <div class="video-wrapper fade-in fade-in-delay-2">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Frame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 06 -->
+<section class="video-section video-dark" id="section-06">
+  <div class="video-inner">
+    <div class="section-header fade-in">
+      <span class="section-number">06</span>
+      <span class="section-pipe"></span>
+      <div class="section-title">The Lens</div>
+    </div>
+    <p class="section-desc fade-in fade-in-delay-1">Starting to understand the tools. Learning what a lens choice does to a scene, how light changes a mood, and that the camera isn't just a recorder — it's a point of view.</p>
+    <div class="video-wrapper fade-in fade-in-delay-2">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Lens" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 07 -->
+<section class="video-section" id="section-07">
+  <div class="video-inner">
+    <div class="section-header fade-in">
+      <span class="section-number">07</span>
+      <span class="section-pipe"></span>
+      <div class="section-title">The Spark</div>
+    </div>
+    <p class="section-desc fade-in fade-in-delay-1">The moment that started it all. Picking up a camera for the first time with no plan and no technique — just the pull to capture something and see what happens.</p>
+    <div class="video-wrapper fade-in fade-in-delay-2">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Spark" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
   </div>
 </section>
