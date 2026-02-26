@@ -1070,7 +1070,24 @@
     .slide { padding: 60px 30px; }
     .section-number { font-size: 48px; }
     .section-title { font-size: 22px; }
-    .hero-photo { display: none; }
+    .hero-photo {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.15;
+    }
+    .hero-photo::after {
+      background: linear-gradient(to bottom, rgba(17,17,17,0.3) 0%, rgba(17,17,17,0.5) 100%);
+    }
+    .hero-photo-inner img {
+      object-position: center center;
+    }
+    /* Staggered hero text on mobile: 0s → 1s → 2s */
+    .hero-slide .hero-greeting.fade-in { transition-delay: 0s; }
+    .hero-slide .hero-bio.fade-in { transition-delay: 1s; }
+    .hero-slide .hero-role.fade-in { transition-delay: 2s; }
     .venn-container { flex-direction: column; gap: 40px; }
     .initiatives-layout { grid-template-columns: 1fr; }
     .podcast-grid { grid-template-columns: 1fr; }
