@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>New York Film Academy — Nick Paladino</title>
+<script type="text/javascript" async="true" src="//pilotnick500z.btttag.com/btt.js"> </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #111111;
+    --white: #ffffff;
+    --gray-100: #f5f4f2;
+    --gray-200: #e8e6e3;
+    --gray-300: #d4d1cc;
+    --gray-400: #a8a49e;
+    --gray-500: #7a7672;
+    --gray-600: #4a4844;
+    --warm: #c9a96e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--gray-100);
+    color: var(--black);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== BACK NAV ===== */
+  .back-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(17,17,17,0.95) 0%, rgba(17,17,17,0.0) 100%);
+    pointer-events: none;
+  }
+
+  .back-nav a, .back-nav span { pointer-events: all; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--white); }
+  .back-link svg { width: 16px; height: 16px; transition: transform 0.2s; }
+  .back-link:hover svg { transform: translateX(-3px); }
+
+  .video-count-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--black);
+    color: var(--white);
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    padding: 120px 60px 80px;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 200px;
+    background: linear-gradient(to top, var(--gray-100), transparent);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--warm);
+    margin-bottom: 24px;
+  }
+
+  .hero-title {
+    font-size: 72px;
+    font-weight: 900;
+    letter-spacing: -3px;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  .hero-pipe-block {
+    border-left: 3px solid rgba(255,255,255,0.25);
+    padding-left: 24px;
+    margin-top: 32px;
+  }
+
+  .hero-desc {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.7);
+    max-width: 560px;
+  }
+
+  /* ===== VIDEO SECTIONS ===== */
+  .video-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 60px;
+    background: var(--gray-100);
+  }
+
+  /* First section pulls up into hero gradient */
+  .video-section:first-of-type {
+    padding-top: 40px;
+    margin-top: -60px;
+  }
+
+  .video-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Dark theme sections */
+  .video-dark {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  .video-dark .section-number {
+    color: var(--white);
+  }
+
+  .video-dark .section-pipe {
+    background: var(--white);
+  }
+
+  .video-dark .section-title {
+    color: var(--white);
+  }
+
+  /* Section transitions */
+  .video-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 120px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .video-dark::before {
+    background: linear-gradient(to bottom, var(--gray-100), var(--black));
+  }
+
+  .video-section:not(.video-dark) + .video-section:not(.video-dark)::before,
+  .video-section:first-of-type::before {
+    display: none;
+  }
+
+  .video-dark + .video-section:not(.video-dark)::before {
+    background: linear-gradient(to bottom, var(--black), var(--gray-100));
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .section-number {
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -3px;
+    color: var(--black);
+  }
+
+  .section-pipe {
+    width: 3px;
+    height: 60px;
+    background: var(--black);
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--black);
+  }
+
+  /* ===== VIDEO EMBED ===== */
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  }
+
+  .video-dark .video-wrapper {
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* ===== FOOTER ===== */
+  .page-footer {
+    text-align: center;
+    padding: 40px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-line {
+    width: 60px;
+    height: 2px;
+    background: var(--gray-300);
+    margin: 0 auto 20px;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 0.5px;
+  }
+
+  .footer-text a {
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-text a:hover { color: var(--black); }
+
+  /* ===== ANIMATIONS ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .fade-in-delay-1 { transition-delay: 0.1s; }
+  .fade-in-delay-2 { transition-delay: 0.2s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .back-nav { padding: 16px 24px; }
+    .hero { padding: 100px 30px 60px; min-height: 50vh; }
+    .hero-title { font-size: 42px; letter-spacing: -1.5px; }
+    .hero-desc { font-size: 15px; }
+    .video-section { padding: 80px 24px; }
+    .video-section:first-of-type { padding-top: 20px; margin-top: -40px; }
+    .section-number { font-size: 48px; }
+    .section-title { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- BACK NAV -->
+<div class="back-nav">
+  <a href="/" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Portfolio
+  </a>
+  <span class="video-count-badge">4 Videos</span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label fade-in">Filmmaking Roots</div>
+    <h1 class="hero-title fade-in fade-in-delay-1">New York<br>Film Academy</h1>
+    <div class="hero-pipe-block fade-in fade-in-delay-2">
+      <p class="hero-desc">
+        A look back at where the visual storytelling began — trained at the New York Film Academy,
+        these projects represent the foundation of narrative, composition, and audience empathy
+        that now drives everything I build. Four chapters of the filmmaking journey.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 01: The Precision -->
+<section class="video-section" id="section-01">
+  <div class="video-inner">
+    <div class="section-header fade-in">
+      <span class="section-number">01</span>
+      <span class="section-pipe"></span>
+      <div class="section-title">The Precision</div>
+    </div>
+    <div class="video-wrapper fade-in fade-in-delay-1">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Precision" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 02: The Refinement -->
+<section class="video-section video-dark" id="section-02">
+  <div class="video-inner">
+    <div class="section-header fade-in">
+      <span class="section-number">02</span>
+      <span class="section-pipe"></span>
+      <div class="section-title">The Refinement</div>
+    </div>
+    <div class="video-wrapper fade-in fade-in-delay-1">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Refinement" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 03: The Complexity -->
+<section class="video-section" id="section-03">
+  <div class="video-inner">
+    <div class="section-header fade-in">
+      <span class="section-number">03</span>
+      <span class="section-pipe"></span>
+      <div class="section-title">The Complexity</div>
+    </div>
+    <div class="video-wrapper fade-in fade-in-delay-1">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Complexity" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 04: The Origin -->
+<section class="video-section video-dark" id="section-04">
+  <div class="video-inner">
+    <div class="section-header fade-in">
+      <span class="section-number">04</span>
+      <span class="section-pipe"></span>
+      <div class="section-title">The Origin</div>
+    </div>
+    <div class="video-wrapper fade-in fade-in-delay-1">
+      <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <div class="footer-line"></div>
+  <div class="footer-text">
+    New York Film Academy — <a href="/">Nick Paladino</a>
+  </div>
+</div>
+
+<script>
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
