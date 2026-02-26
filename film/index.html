@@ -325,6 +325,72 @@
   .fade-in-delay-2 { transition-delay: 0.2s; }
   .fade-in-delay-3 { transition-delay: 0.3s; }
 
+  /* ===== VIDEO POPUP ===== */
+  .video-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(17,17,17,0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: zoom-out;
+  }
+
+  .video-popup-overlay.active {
+    display: flex;
+  }
+
+  .video-popup-content {
+    position: relative;
+    width: 90vw;
+    max-width: 960px;
+    aspect-ratio: 16 / 9;
+    cursor: default;
+  }
+
+  .video-popup-content iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .video-popup-close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .video-popup-close:hover {
+    border-color: var(--white);
+    color: var(--white);
+  }
+
+  .bonus-link {
+    color: var(--warm);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(201,169,110,0.4);
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .bonus-link:hover {
+    border-bottom-color: var(--warm);
+  }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 900px) {
     .back-nav { padding: 16px 24px; }
@@ -386,7 +452,7 @@
       <span class="section-pipe"></span>
       <div class="section-title">The Storytelling</div>
     </div>
-    <p class="section-desc fade-in fade-in-delay-1">The Proposal - Technically just an amalgamation of clips into an Animated Music Video.  These tell a story of me and my wife through bringing together several animes into a unique delivery and ultimately a proposal.  While none of the visuals are uniquely mine, the edits create something that is a story told only by me. While much later in the sequence of content and a deviation in format vs the rest, the DNA is the same. Bonus reaction video of the proposal: https://www.youtube.com/watch?v=OYIc-p9Xn80</p>
+    <p class="section-desc fade-in fade-in-delay-1">The Proposal - Technically just an amalgamation of clips into an Animated Music Video.  These tell a story of me and my wife through bringing together several animes into a unique delivery and ultimately a proposal.  While none of the visuals are uniquely mine, the edits create something that is a story told only by me. While much later in the sequence of content and a deviation in format vs the rest, the DNA is the same. <a class="bonus-link" onclick="openBonusVideo()" role="button">Bonus: Watch the proposal reaction video</a></p>
     <div class="video-wrapper fade-in fade-in-delay-2">
       <iframe src="https://www.youtube-nocookie.com/embed/sc654Zd9hcM" title="The Storytelling" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
@@ -477,6 +543,14 @@
   </div>
 </div>
 
+<!-- VIDEO POPUP -->
+<div class="video-popup-overlay" id="videoPopup" onclick="closeBonusVideo(event)">
+  <div class="video-popup-content">
+    <button class="video-popup-close" onclick="closeBonusVideo(event)">&#x2715;</button>
+    <iframe id="bonusIframe" src="" title="Bonus: Proposal Reaction" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+</div>
+
 <script>
 // Fade-in on scroll
 const observer = new IntersectionObserver((entries) => {
@@ -485,6 +559,28 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Bonus video popup
+function openBonusVideo() {
+  const popup = document.getElementById('videoPopup');
+  const iframe = document.getElementById('bonusIframe');
+  iframe.src = 'https://www.youtube-nocookie.com/embed/OYIc-p9Xn80?autoplay=1';
+  popup.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBonusVideo(e) {
+  if (e && e.type === 'click' && e.target !== document.getElementById('videoPopup') && !e.target.classList.contains('video-popup-close')) return;
+  const popup = document.getElementById('videoPopup');
+  const iframe = document.getElementById('bonusIframe');
+  popup.classList.remove('active');
+  iframe.src = '';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeBonusVideo();
+});
 </script>
 
 </body>
