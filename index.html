@@ -2,1928 +2,807 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nick Paladino — Portfolio</title>
-<script type="text/javascript" async="true" src="//pilotnick500z.btttag.com/btt.js"> </script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Backyard 18 — Scorecard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #111111;
-    --white: #ffffff;
-    --gray-100: #f5f4f2;
-    --gray-200: #e8e6e3;
-    --gray-300: #d4d1cc;
-    --gray-400: #a8a49e;
-    --gray-500: #7a7672;
-    --gray-600: #4a4844;
-    --section-gap: 0;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: var(--gray-100);
-    color: var(--black);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-
-  /* Subtle paper texture */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .slide {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-    padding: 80px 60px;
-  }
-
-  .slide-inner {
-    width: 100%;
-    max-width: 1200px;
-    position: relative;
-  }
-
-  /* SECTION NUMBER STYLE — bold number | pipe | title */
-  .section-label {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 40px;
-  }
-
-  .section-number {
-    font-size: 72px;
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -3px;
-    color: var(--black);
-  }
-
-  .section-pipe {
-    width: 3px;
-    height: 60px;
-    background: var(--black);
-    flex-shrink: 0;
-  }
-
-  .section-title {
-    font-size: 28px;
-    font-weight: 800;
-    line-height: 1.15;
-    color: var(--black);
-  }
-
-  /* PAGE FOOTER */
-  .page-num {
-    position: absolute;
-    bottom: 30px;
-    left: 60px;
-    font-size: 11px;
-    color: var(--gray-400);
-    letter-spacing: 0.5px;
-    z-index: 2;
-  }
-
-  .page-num span {
-    margin-left: 20px;
-  }
-
-  /* ===== SLIDE 0: HERO / INTRO ===== */
-  .hero-slide {
-    background: var(--black);
-    color: var(--white);
-    position: relative;
-    overflow: hidden;
-    height: 100vh;
-    min-height: 100vh;
-  }
-
-  .hero-slide::after {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 45%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 700px;
-  }
-
-  .hero-pipe {
-    width: 3px;
-    height: 100%;
-    background: var(--white);
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0.4;
-  }
-
-  .hero-text-block {
-    padding-left: 32px;
-    border-left: 3px solid rgba(255,255,255,0.35);
-  }
-
-  .hero-greeting {
-    font-size: 18px;
-    font-weight: 400;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 24px;
-    letter-spacing: 0.5px;
-  }
-
-  .hero-bio {
-    font-size: 17px;
-    font-weight: 300;
-    line-height: 1.75;
-    color: rgba(255,255,255,0.8);
-    margin-bottom: 40px;
-    max-width: 600px;
-  }
-
-  .hero-role {
-    font-size: 32px;
-    font-weight: 900;
-    letter-spacing: -0.5px;
-  }
-
-  .hero-photo {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 42%;
-    height: 100%;
-    z-index: 1;
-    overflow: hidden;
-  }
-
-  .hero-photo::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to right, var(--black) 0%, rgba(17,17,17,0.85) 15%, rgba(17,17,17,0.3) 50%, rgba(17,17,17,0.1) 100%);
-    z-index: 2;
-  }
-
-  .hero-photo-inner {
-    width: 100%;
-    height: 100%;
-  }
-
-  .hero-photo-inner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 20%;
-    filter: grayscale(100%) contrast(1.1) brightness(0.9);
-  }
-
-  /* ===== SLIDE 1: AGENDA ===== */
-  .agenda-list {
-    display: flex;
-    flex-direction: column;
-    gap: 36px;
-    margin-top: 20px;
-  }
-
-  .agenda-item {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  .agenda-item:hover {
-    transform: translateX(8px);
-  }
-
-  .agenda-num {
-    font-size: 56px;
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -2px;
-    min-width: 80px;
-  }
-
-  .agenda-pipe {
-    width: 3px;
-    height: 48px;
-    background: var(--black);
-    flex-shrink: 0;
-  }
-
-  .agenda-text {
-    font-size: 22px;
-    font-weight: 800;
-    line-height: 1.25;
-  }
-
-  /* ===== SLIDE 2: TIMELINE ===== */
-  .timeline-container {
-    position: relative;
-    margin-top: 50px;
-    padding-bottom: 30px;
-    padding-top: 20px;
-    overflow-x: auto;
-    overflow-y: visible;
-    min-height: 580px;
-  }
-
-  .timeline-track {
-    display: flex;
-    align-items: center;
-    position: relative;
-    min-width: 1100px;
-    height: 560px;
-    padding-top: 80px;
-  }
-
-  .timeline-line {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--black);
-    z-index: 1;
-  }
-
-  .timeline-line::before,
-  .timeline-line::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 2px solid var(--black);
-    background: var(--gray-100);
-  }
-
-  .timeline-line::before { left: 0; }
-  .timeline-line::after { right: 0; }
-
-  .tl-node {
-    position: absolute;
-    top: 50%;
-    z-index: 2;
-  }
-
-  .tl-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid var(--black);
-    background: var(--gray-100);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-  }
-
-  .tl-connector {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    border-left: 1.5px dotted var(--black);
-    z-index: 2;
-  }
-
-  .tl-connector.above-conn {
-    bottom: 6px;
-    height: 80px;
-  }
-
-  .tl-connector.below-conn {
-    top: 6px;
-    height: 80px;
-  }
-
-  .tl-card {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    text-align: center;
-  }
-
-  .tl-card.above {
-    bottom: 20px;
-    /* position relative to connector: sits above the connector top */
-    margin-bottom: 60px;
-  }
-
-  .tl-card.below {
-    top: 20px;
-    margin-top: 60px;
-  }
-
-  a.tl-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: transform 0.2s, opacity 0.2s;
-  }
-
-  a.tl-link:hover {
-    transform: scale(1.05);
-  }
-
-  a.tl-link:hover .tl-company {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  .tl-company {
-    font-size: 17px;
-    font-weight: 800;
-    line-height: 1.25;
-  }
-
-  .tl-location {
-    font-size: 12px;
-    font-style: italic;
-    color: var(--gray-500);
-    margin-top: 2px;
-  }
-
-  .tl-role {
-    font-size: 12px;
-    color: var(--gray-600);
-    margin-top: 3px;
-  }
-
-  .tl-dates {
-    font-size: 13px;
-    font-weight: 700;
-    margin-top: 4px;
-  }
-
-  .tl-origin-photo {
-    width: 100px;
-    height: 120px;
-    overflow: hidden;
-    margin: 0 auto;
-    border: 2px solid var(--black);
-  }
-
-  .tl-origin-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%);
-    transition: filter 0.4s;
-  }
-
-  .tl-origin-photo:hover img {
-    filter: grayscale(0%);
-  }
-
-  .tl-range-label {
-    position: absolute;
-    top: calc(50% + 20px);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gray-600);
-    z-index: 2;
-  }
-
-  /* ===== SLIDE 3: PROCESS CIRCLES ===== */
-  .process-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    margin-top: 50px;
-    position: relative;
-  }
-
-  .process-circle {
-    border: 2px solid var(--black);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .process-circle .label {
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .process-details {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 30px;
-    margin-top: 60px;
-  }
-
-  .process-detail-col {
-    position: relative;
-  }
-
-  .process-detail-col::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    border: 2px solid var(--black);
-    background: var(--gray-100);
-    display: block;
-    margin-bottom: 12px;
-  }
-
-  .process-detail-col h4 {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .process-detail-col p {
-    font-size: 12.5px;
-    line-height: 1.65;
-    color: var(--gray-600);
-  }
-
-  /* connector dots */
-  .process-detail-col .connector {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 1px;
-    height: 0;
-    border-left: 1.5px dotted var(--black);
-  }
-
-  /* ===== SLIDE 4: CURRENT ROLE - VENN ===== */
-  .venn-container {
-    display: flex;
-    align-items: center;
-    gap: 80px;
-    margin-top: 50px;
-  }
-
-  .venn-diagram {
-    position: relative;
-    width: 380px;
-    height: 340px;
-    flex-shrink: 0;
-  }
-
-  .venn-circle {
-    position: absolute;
-    border: 2px solid var(--gray-400);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .venn-circle .venn-label {
-    font-size: 15px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--gray-500);
-  }
-
-  .venn-center {
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: var(--black);
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-align: center;
-    line-height: 1.2;
-    z-index: 2;
-  }
-
-  .role-description {
-    border-left: 3px solid var(--gray-300);
-    padding-left: 24px;
-  }
-
-  .role-description p {
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--gray-600);
-    margin-bottom: 16px;
-  }
-
-  .capability-list {
-    list-style: none;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 24px;
-    margin-top: 24px;
-  }
-
-  .capability-list li {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--black);
-    padding: 6px 0;
-    border-bottom: 1px solid var(--gray-200);
-  }
-
-  /* ===== REVENUE METHOD ===== */
-  .revenue-method {
-    margin-top: 50px;
-    padding-top: 40px;
-    border-top: 1px solid var(--gray-200);
-  }
-
-  .revenue-method-header {
-    margin-bottom: 30px;
-  }
-
-  .revenue-method-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--gray-400);
-    margin-bottom: 8px;
-  }
-
-  .revenue-method-title {
-    font-size: 24px;
-    font-weight: 900;
-    color: var(--black);
-    margin-bottom: 10px;
-  }
-
-  .revenue-method-desc {
-    font-size: 14px;
-    color: var(--gray-500);
-    line-height: 1.7;
-    max-width: 600px;
-  }
-
-  .revenue-method-desc em {
-    font-style: italic;
-    color: var(--black);
-    font-weight: 600;
-  }
-
-  .revenue-factors {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0;
-  }
-
-  .revenue-factor {
-    padding: 24px 20px;
-    border-left: 2px solid var(--black);
-    position: relative;
-    transition: background 0.2s;
-  }
-
-  .revenue-factor:hover {
-    background: rgba(0,0,0,0.03);
-  }
-
-  .rf-number {
-    font-size: 32px;
-    font-weight: 900;
-    color: var(--gray-200);
-    line-height: 1;
-    margin-bottom: 10px;
-  }
-
-  .revenue-factor:hover .rf-number {
-    color: var(--black);
-  }
-
-  .rf-name {
-    font-size: 15px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--black);
-    margin-bottom: 8px;
-  }
-
-  .rf-desc {
-    font-size: 12px;
-    color: var(--gray-500);
-    line-height: 1.5;
-  }
-
-  .brag-stats-row {
-    display: flex;
-    gap: 24px;
-    margin-top: 40px;
-  }
-
-  .brag-stat-box {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    background: var(--black);
-    color: var(--white);
-    padding: 20px 32px;
-    flex: 1;
-  }
-
-  .brag-num {
-    font-size: 42px;
-    font-weight: 900;
-    letter-spacing: -2px;
-    white-space: nowrap;
-  }
-
-  .brag-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    line-height: 1.5;
-    opacity: 0.7;
-  }
-
-  /* ===== SLIDE 5: INITIATIVES ===== */
-  .initiatives-layout {
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 60px;
-    margin-top: 40px;
-    align-items: start;
-  }
-
-  .initiatives-desc {
-    border-left: 3px solid var(--gray-300);
-    padding-left: 24px;
-  }
-
-  .initiatives-desc p {
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--gray-600);
-  }
-
-  .initiatives-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .initiative-item {
-    font-size: 17px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--gray-200);
-    transition: all 0.2s;
-    cursor: default;
-  }
-
-  .initiative-item:hover {
-    padding-left: 12px;
-    border-bottom-color: var(--black);
-  }
-
-  /* ===== SLIDE 6: CLIENTS / BRANDS ===== */
-  .brands-marquee {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-bottom: 40px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid var(--gray-200);
-    flex-wrap: wrap;
-  }
-
-  .brand-item.marquee {
-    font-size: 32px;
-    font-weight: 900;
-    color: var(--black);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .brands-grid-full {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4px 20px;
-    align-items: center;
-    justify-items: start;
-  }
-
-  .brands-grid-full .brand-item {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gray-400);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    padding: 7px 0;
-    border-bottom: 1px solid var(--gray-200);
-    width: 100%;
-    transition: color 0.3s;
-    cursor: default;
-  }
-
-  .brands-grid-full .brand-item:hover {
-    color: var(--black);
-  }
-
-  .brands-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 40px 50px;
-    margin-top: 50px;
-    align-items: center;
-    justify-items: center;
-  }
-
-  .brand-item {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--gray-400);
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    text-align: center;
-    transition: color 0.3s;
-    cursor: default;
-  }
-
-  .brand-item:hover {
-    color: var(--black);
-  }
-
-  /* ===== PODCAST GUEST CARDS ===== */
-  .podcast-guests-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .podcast-guest-card {
-    padding: 20px 18px;
-    border: 1px solid var(--gray-200);
-    transition: all 0.25s;
-    cursor: default;
-    min-width: 0;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-
-  .podcast-guest-card:hover {
-    border-color: var(--black);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-  }
-
-  .pgc-brand {
-    font-size: 16px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-    color: var(--black);
-    overflow-wrap: break-word;
-    word-break: break-word;
-  }
-
-  .pgc-person {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--gray-600);
-  }
-
-  .pgc-title {
-    font-size: 11px;
-    color: var(--gray-400);
-    margin-top: 3px;
-    line-height: 1.4;
-  }
-
-  /* ===== SLIDE 6: IMPACT AT SCALE ===== */
-  .scale-stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    margin-bottom: 48px;
-  }
-
-  .sector-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  /* ===== SLIDE 7: PODCAST SHOWCASE ===== */
-  .podcast-slide {
-    background: var(--black);
-    color: var(--white);
-  }
-
-  .podcast-slide .section-number { color: var(--white); }
-  .podcast-slide .section-pipe { background: var(--white); }
-  .podcast-slide .section-title { color: var(--white); }
-
-  .podcast-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    margin-top: 50px;
-    align-items: center;
-  }
-
-  .podcast-info {
-    border-left: 3px solid rgba(255,255,255,0.25);
-    padding-left: 24px;
-  }
-
-  .podcast-info h3 {
-    font-size: 24px;
-    font-weight: 800;
-    margin-bottom: 16px;
-  }
-
-  .podcast-info p {
-    font-size: 15px;
-    line-height: 1.75;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 16px;
-  }
-
-  .podcast-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-top: 30px;
-  }
-
-  .stat-box {
-    text-align: center;
-  }
-
-  .stat-box .num {
-    font-size: 36px;
-    font-weight: 900;
-    letter-spacing: -1px;
-  }
-
-  .stat-box .lbl {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.5);
-    margin-top: 4px;
-  }
-
-  .guest-brands {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 30px;
-  }
-
-  .guest-brand {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    padding: 8px 16px;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.6);
-    transition: all 0.2s;
-  }
-
-  .guest-brand:hover {
-    border-color: var(--white);
-    color: var(--white);
-  }
-
-  .podcast-links {
-    display: flex;
-    gap: 16px;
-    margin-top: 30px;
-  }
-
-  .podcast-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--white);
-    text-decoration: none;
-    padding: 12px 20px;
-    border: 1px solid rgba(255,255,255,0.3);
-    transition: all 0.2s;
-  }
-
-  .podcast-link:hover {
-    background: var(--white);
-    color: var(--black);
-  }
-
-  /* ===== SLIDE 8: CONTACT ===== */
-  .contact-slide {
-    background: var(--black);
-    color: var(--white);
-    text-align: center;
-  }
-
-  .contact-name {
-    font-size: 64px;
-    font-weight: 900;
-    letter-spacing: -2px;
-    margin-bottom: 16px;
-  }
-
-  .contact-tagline {
-    font-size: 16px;
-    font-weight: 300;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 50px;
-  }
-
-  .contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-  }
-
-  .contact-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    color: rgba(255,255,255,0.7);
-    text-decoration: none;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
-  }
-
-  .contact-link:hover {
-    color: var(--white);
-  }
-
-  .contact-link svg {
-    width: 18px;
-    height: 18px;
-    opacity: 0.5;
-  }
-
-  /* ===== ANIMATIONS ===== */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .fade-in-delay-1 { transition-delay: 0.1s; }
-  .fade-in-delay-2 { transition-delay: 0.2s; }
-  .fade-in-delay-3 { transition-delay: 0.3s; }
-  .fade-in-delay-4 { transition-delay: 0.4s; }
-  .fade-in-delay-5 { transition-delay: 0.5s; }
-
-  /* NAV DOTS */
-  .nav-dots {
-    position: fixed;
-    right: 30px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    z-index: 100;
-  }
-
-  .nav-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 1.5px solid var(--gray-400);
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .nav-dot.active {
-    background: var(--black);
-    border-color: var(--black);
-    transform: scale(1.3);
-  }
-
-  .nav-dot.invert.active {
-    background: var(--white);
-    border-color: var(--white);
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 900px) {
-    .slide { padding: 60px 30px; }
-    .section-number { font-size: 48px; }
-    .section-title { font-size: 22px; }
-    .hero-photo {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.15;
-    }
-    .hero-photo::after {
-      background: linear-gradient(to bottom, rgba(17,17,17,0.3) 0%, rgba(17,17,17,0.5) 100%);
-    }
-    .hero-photo-inner img {
-      object-position: center center;
-    }
-    /* Staggered hero text on mobile: 0s → 1s → 2s */
-    .hero-slide .hero-greeting.fade-in { transition-delay: 0s; }
-    .hero-slide .hero-bio.fade-in { transition-delay: 1s; }
-    .hero-slide .hero-role.fade-in { transition-delay: 2s; }
-    .hero-slide { align-items: flex-start; padding-top: 80px; }
-    .venn-container { flex-direction: column; gap: 40px; }
-    .initiatives-layout { grid-template-columns: 1fr; }
-    .podcast-grid { grid-template-columns: 1fr; }
-    .brands-grid { grid-template-columns: repeat(2, 1fr); }
-    .brands-grid-full { grid-template-columns: repeat(2, 1fr); }
-    .scale-stats-row { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .scale-stats-row > div { font-size: 14px; }
-    .scale-stats-row > div > div:first-child { font-size: 32px !important; }
-    .sector-cards-grid { grid-template-columns: 1fr; gap: 16px; }
-    .brands-marquee { gap: 30px; }
-    .brand-item.marquee { font-size: 22px; }
-    .podcast-guests-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .revenue-factors { grid-template-columns: repeat(2, 1fr); }
-    .brag-stats-row { flex-direction: column; }
-    .process-details { grid-template-columns: repeat(2, 1fr); }
-    .capability-list { grid-template-columns: 1fr; }
-    .contact-name { font-size: 40px; }
-    .nav-dots { display: none; }
-    .timeline-container { margin-left: -30px; margin-right: -30px; padding: 0 30px; }
+  :root{
+    --turf-deep:#132a20;
+    --turf:#1f4d38;
+    --turf-mid:#2d6a4f;
+    --cream:#f5f1e4;
+    --cream-dim:#e8e1cd;
+    --navy:#1d3557;
+    --flag:#bc4749;
+    --gold:#c9a227;
+    --teal:#2a9d8f;
+    --ink:#17201a;
+    --line: rgba(23,32,26,0.14);
+    --shadow: 0 10px 30px rgba(10,20,14,0.25);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: radial-gradient(1200px 800px at 50% -10%, var(--turf-mid), var(--turf-deep) 65%);
+    color:var(--cream);
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  #app{
+    max-width:520px;
+    margin:0 auto;
+    padding:18px 14px 60px;
+    min-height:100vh;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(245,241,228,0.18);
+  }
+  .brand-title{
+    font-size:22px;
+    color:var(--cream);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand-title .flagmark{width:16px;height:16px;flex:none;}
+  .brand-sub{
+    font-size:10.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:rgba(245,241,228,0.55);
+  }
+  .card{
+    background:var(--cream);
+    color:var(--ink);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    padding:18px;
+    margin-bottom:14px;
+  }
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.02em;
+    border:none;
+    border-radius:10px;
+    padding:11px 16px;
+    cursor:pointer;
+    transition:transform .08s ease, filter .15s ease;
+  }
+  .btn:active{transform:scale(0.96);}
+  .btn-primary{background:var(--navy); color:var(--cream);}
+  .btn-primary:hover{filter:brightness(1.12);}
+  .btn-ghost{background:transparent; color:var(--cream); border:1px solid rgba(245,241,228,0.35);}
+  .btn-ghost:hover{background:rgba(245,241,228,0.08);}
+  .btn-flag{background:var(--flag); color:var(--cream);}
+  .btn-block{width:100%; display:block; text-align:center;}
+  .row{display:flex; gap:8px;}
+  .row.wrap{flex-wrap:wrap;}
+  .grow{flex:1;}
+  label.field-label{
+    display:block;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:rgba(23,32,26,0.55);
+    margin-bottom:6px;
+  }
+  input[type=text]{
+    width:100%;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    padding:10px 12px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+  }
+  input[type=text]:focus{outline:2px solid var(--navy); outline-offset:1px;}
+
+  /* Setup screen */
+  .player-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:9px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .player-row:last-child{border-bottom:none;}
+  .swatch{width:14px;height:14px;border-radius:50%; flex:none;}
+  .opp-toggle{
+    display:flex; gap:8px; margin:10px 0 4px;
+  }
+  .opp-toggle button{
+    flex:1;
+    padding:10px 0;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .opp-toggle button.active{
+    background:var(--navy); color:var(--cream); border-color:var(--navy);
+  }
+
+  /* Hole strip nav */
+  .hole-strip{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    padding:4px 2px 12px;
+    margin-bottom:6px;
+  }
+  .hole-dot{
+    flex:none;
+    width:30px;height:30px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:600;
+    background:rgba(245,241,228,0.12);
+    color:rgba(245,241,228,0.65);
+    border:1px solid rgba(245,241,228,0.2);
+    cursor:pointer;
+  }
+  .hole-dot.filled{background:var(--gold); color:var(--ink); border-color:var(--gold);}
+  .hole-dot.current{outline:2px solid var(--flag); outline-offset:2px;}
+
+  /* Hole play card */
+  .hole-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:6px;
+  }
+  .hole-num{font-size:40px; line-height:1; color:var(--turf-deep);}
+  .hole-meta{text-align:right; font-size:11px; color:rgba(23,32,26,0.6); line-height:1.6;}
+  .hole-meta b{color:var(--ink);}
+  .format-pill{
+    display:inline-block;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:4px 9px;
+    border-radius:999px;
+    margin:6px 0 10px;
+    font-weight:600;
+  }
+  .format-pill.p3{background:rgba(201,162,39,0.18); color:#8a6d10;}
+  .format-pill.p4{background:rgba(29,53,87,0.12); color:var(--navy);}
+  .format-pill.p5{background:rgba(188,71,73,0.14); color:var(--flag);}
+  .format-rule{font-size:12.5px; color:rgba(23,32,26,0.75); line-height:1.5; margin-bottom:14px;}
+  .diagram-wrap{display:flex; justify-content:center; margin:4px 0 14px;}
+
+  .score-line{
+    display:flex; align-items:center; gap:10px;
+    padding:10px 0;
+    border-top:1px solid var(--line);
+  }
+  .score-line:first-of-type{border-top:none;}
+  .pname{flex:1; font-size:14px; font-weight:600; display:flex; align-items:center; gap:8px;}
+  .stepper{display:flex; align-items:center; gap:10px;}
+  .stepbtn{
+    width:34px;height:34px;border-radius:9px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:18px; font-weight:700;
+    cursor:pointer;
+    color:var(--ink);
+    line-height:1;
+  }
+  .stepbtn:active{background:var(--cream-dim);}
+  .scoreval{
+    width:30px; text-align:center; font-size:18px; font-weight:700;
+  }
+
+  .nav-buttons{display:flex; gap:8px; margin-top:16px;}
+
+  /* Scorecard table */
+  .tabs{display:flex; gap:6px; margin-bottom:12px;}
+  .tab{
+    flex:1; text-align:center; padding:9px 0;
+    border-radius:9px; cursor:pointer;
+    font-size:12px; font-weight:600; letter-spacing:0.03em;
+    background:rgba(245,241,228,0.1);
+    color:rgba(245,241,228,0.7);
+    border:1px solid rgba(245,241,228,0.18);
+  }
+  .tab.active{background:var(--cream); color:var(--ink); border-color:var(--cream);}
+
+  table.scoretable{border-collapse:collapse; width:100%; font-size:11.5px;}
+  table.scoretable th, table.scoretable td{
+    padding:5px 3px; text-align:center; min-width:22px;
+  }
+  table.scoretable thead th{
+    color:rgba(23,32,26,0.55); font-weight:600; font-size:10px;
+    text-transform:uppercase; letter-spacing:0.03em;
+    border-bottom:1px solid var(--line);
+  }
+  table.scoretable td.rowlabel, table.scoretable th.rowlabel{
+    text-align:left; font-weight:700; min-width:64px; padding-left:2px;
+  }
+  table.scoretable tbody tr{border-bottom:1px solid rgba(23,32,26,0.06);}
+  table.scoretable td.total{font-weight:700; border-left:1px solid var(--line);}
+  .scorecell{position:relative; font-weight:600;}
+  .scorecell .mark{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px; height:20px;
+  }
+  .scorecell .mark.under{border:1.5px solid var(--flag); border-radius:50%;}
+  .scorecell .mark.over{border:1.5px solid var(--navy); border-radius:3px;}
+  .scorecell .mark.eagle{border:1.5px solid var(--flag); border-radius:50%; box-shadow: 0 0 0 3px rgba(0,0,0,0) inset, 0 0 0 1.5px var(--flag);}
+  .section-scroll{overflow-x:auto;}
+  .totals-strip{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:9px 0; border-bottom:1px solid var(--line); font-size:13px;
+  }
+  .totals-strip:last-child{border-bottom:none;}
+  .totals-strip .pname{font-weight:700;}
+  .toparlabel{font-size:11px; color:rgba(23,32,26,0.55);}
+
+  /* Match play */
+  .match-card{margin-bottom:10px;}
+  .match-status{
+    font-family:'Fraunces', serif; font-weight:700; font-size:20px;
+    margin:4px 0 2px;
+  }
+  .match-sub{font-size:11px; color:rgba(23,32,26,0.55); margin-bottom:10px;}
+  .wlh{display:flex; gap:14px; font-size:12px;}
+  .wlh span b{display:block; font-size:16px; font-family:'Fraunces',serif;}
+
+  .footer-note{
+    text-align:center; font-size:10.5px; color:rgba(245,241,228,0.45);
+    margin-top:26px; line-height:1.6;
+  }
+  .empty{color:rgba(23,32,26,0.4); font-size:13px; padding:6px 0;}
+
+  /* Rules modal */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,20,14,0.55);
+    display:flex; align-items:flex-end; justify-content:center;
+    z-index:50; padding:0;
+  }
+  .modal-sheet{
+    background:var(--cream); color:var(--ink);
+    width:100%; max-width:520px;
+    border-radius:18px 18px 0 0;
+    padding:18px 18px 26px;
+    box-shadow:var(--shadow);
+    max-height:80vh; overflow-y:auto;
+  }
+  .modal-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .rules-list{
+    margin:0; padding-left:18px; list-style:disc;
+  }
+  .rules-list li{
+    font-size:13px; line-height:1.55; margin-bottom:10px;
+    color:rgba(23,32,26,0.85);
+  }
+  .rules-list li:last-child{margin-bottom:0;}
+  @media (min-width:560px){
+    .modal-backdrop{align-items:center;}
+    .modal-sheet{border-radius:18px;}
   }
 </style>
 </head>
 <body>
-
-<!-- NAV DOTS -->
-<nav class="nav-dots" id="navDots"></nav>
-
-<!-- SLIDE 0: HERO -->
-<section class="slide hero-slide" id="slide-0">
-  <div class="slide-inner">
-    <div class="hero-content">
-      <div class="hero-text-block">
-        <p class="hero-greeting fade-in">Hello, I'm Nick Paladino</p>
-        <p class="hero-bio fade-in fade-in-delay-1">
-          Digital Experience Leader, Podcast Host, and Product Innovator.<br>
-          With roots in filmmaking and visual storytelling — trained at the New York Film Academy and the University of Alabama's Telecommunication & Film program — I bring a cinematic eye to the world of digital experience. That foundation in narrative, composition, and audience empathy now drives how I help the world's biggest brands create seamless digital experiences that convert.
-        </p>
-        <p class="hero-role fade-in fade-in-delay-2">Solutions Architect<br>& Digital Storyteller</p>
-      </div>
-    </div>
-    <div class="hero-photo">
-      <div class="hero-photo-inner">
-        <img src="images/hero.png" alt="Nick Paladino">
-      </div>
-    </div>
-  </div>
-  <div class="page-num">1 <span>Nick Paladino — Portfolio</span></div>
-</section>
-
-<!-- SLIDE 1: AGENDA -->
-<section class="slide" id="slide-1">
-  <div class="slide-inner">
-    <p style="font-size: 14px; text-transform: uppercase; letter-spacing: 4px; color: var(--gray-400); margin-bottom: 50px;" class="fade-in">AGENDA</p>
-    <div class="agenda-list">
-      <a href="#slide-2" class="agenda-item fade-in fade-in-delay-1" style="text-decoration:none;color:inherit;">
-        <span class="agenda-num">01</span>
-        <span class="agenda-pipe"></span>
-        <span class="agenda-text">The Path to<br>Digital Storytelling</span>
-      </a>
-      <a href="#slide-3" class="agenda-item fade-in fade-in-delay-2" style="text-decoration:none;color:inherit;">
-        <span class="agenda-num">02</span>
-        <span class="agenda-pipe"></span>
-        <span class="agenda-text">Current Role &<br>Activities</span>
-      </a>
-      <a href="#slide-4" class="agenda-item fade-in fade-in-delay-3" style="text-decoration:none;color:inherit;">
-        <span class="agenda-num">03</span>
-        <span class="agenda-pipe"></span>
-        <span class="agenda-text">Key Initiatives &<br>Impact</span>
-      </a>
-      <a href="#slide-5" class="agenda-item fade-in fade-in-delay-4" style="text-decoration:none;color:inherit;">
-        <span class="agenda-num">04</span>
-        <span class="agenda-pipe"></span>
-        <span class="agenda-text">Digital Experience<br>Process</span>
-      </a>
-      <a href="#slide-6" class="agenda-item fade-in fade-in-delay-5" style="text-decoration:none;color:inherit;">
-        <span class="agenda-num">05</span>
-        <span class="agenda-pipe"></span>
-        <span class="agenda-text">Impact<br>at Scale</span>
-      </a>
-      <a href="#slide-7" class="agenda-item fade-in fade-in-delay-5" style="text-decoration:none;color:inherit;">
-        <span class="agenda-num">06</span>
-        <span class="agenda-pipe"></span>
-        <span class="agenda-text">Podcast &<br>Guest Brands</span>
-      </a>
-    </div>
-  </div>
-  <div class="page-num">2 <span>Nick Paladino — Portfolio</span></div>
-</section>
-
-<!-- SLIDE 2: TIMELINE -->
-<section class="slide" id="slide-2">
-  <div class="slide-inner">
-    <div class="section-label fade-in">
-      <span class="section-number">01</span>
-      <span class="section-pipe"></span>
-      <div class="section-title">The Path to<br>Digital Storytelling</div>
-    </div>
-    <div class="timeline-container fade-in fade-in-delay-2">
-      <div class="timeline-track">
-        <div class="timeline-line"></div>
-
-        <!-- Node 0a: New York Film Academy with photo -->
-        <div class="tl-node" style="left: 8%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector above-conn" style="height: 90px;"></div>
-          <a href="/film" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 70px;">
-            <div class="tl-origin-photo">
-              <img src="images/nyfa.png" alt="Nick Paladino at New York Film Academy">
-            </div>
-            <div class="tl-company" style="margin-top: 8px;">New York<br>Film Academy</div>
-            <div class="tl-role">Filmmaking</div>
-          </a>
-        </div>
-
-        <!-- Node 0b: University of Alabama -->
-        <div class="tl-node" style="left: 18%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector below-conn"></div>
-          <a href="https://cis.ua.edu/" class="tl-link tl-card below" style="top: 20px; margin-top: 60px;">
-            <div class="tl-company">University of<br>Alabama</div>
-            <div class="tl-role">B.S. Telecom & Film, Business</div>
-          </a>
-        </div>
-
-        <!-- Node 1: Best Buy -->
-        <div class="tl-node" style="left: 28%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector above-conn"></div>
-          <a href="https://stores.bestbuy.com/al/tuscaloosa/1800-mcfarland-blvd-e-1540.html" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 60px;">
-            <div class="tl-company">Best Buy</div>
-            <div class="tl-role">Manager</div>
-          </a>
-        </div>
-
-        <!-- Node 3: CoolJuice -->
-        <div class="tl-node" style="left: 38%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector below-conn"></div>
-          <a href="https://www.linkedin.com/company/cooljuice-beverage-company/about/" class="tl-link tl-card below" style="top: 20px; margin-top: 60px;">
-            <div class="tl-company">CoolJuice<br>Beverage Co.</div>
-            <div class="tl-role">Manager</div>
-          </a>
-        </div>
-
-        <!-- Node 4: Morneau Shepell -->
-        <div class="tl-node" style="left: 48%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector above-conn"></div>
-          <a href="https://en.wikipedia.org/wiki/LifeWorks" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 60px;">
-            <div class="tl-company">Morneau Shepell</div>
-            <div class="tl-role">Manager</div>
-          </a>
-        </div>
-
-        <!-- Node 5: The Home Depot -->
-        <div class="tl-node" style="left: 58%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector below-conn" style="height: 90px;"></div>
-          <a href="https://www.homedepot.com/daily-deals" class="tl-link tl-card below" style="top: 20px; margin-top: 70px;">
-            <div class="tl-company">The Home Depot</div>
-            <div class="tl-location">Atlanta</div>
-            <div class="tl-role">Product Manager</div>
-          </a>
-        </div>
-
-        <!-- Node 6: Coffee Woodworks -->
-        <div class="tl-node" style="left: 68%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector above-conn"></div>
-          <a href="/coffeewoodworks" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 60px;">
-            <div class="tl-company">Coffee Woodworks</div>
-            <div class="tl-location">Side Venture</div>
-            <div class="tl-role">Founder / Woodworker</div>
-          </a>
-        </div>
-
-        <!-- Node 7: Blue Triangle -->
-        <div class="tl-node" style="left: 80%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector below-conn" style="height: 100px;"></div>
-          <a href="https://bluetriangle.com/" class="tl-link tl-card below" style="top: 20px; margin-top: 80px;">
-            <div class="tl-dates">Current</div>
-            <div class="tl-company" style="font-size: 20px;">Blue Triangle</div>
-            <div class="tl-location">Atlanta</div>
-            <div class="tl-role">Distinguished Solutions Architect</div>
-          </a>
-        </div>
-
-        <!-- Node 8: Podcast with photo -->
-        <div class="tl-node" style="left: 92%;">
-          <div class="tl-dot" style="top: -6px;"></div>
-          <div class="tl-connector above-conn" style="height: 90px;"></div>
-          <a href="https://www.thefrictionlessexperience.com/page/2/" class="tl-link tl-card above" style="bottom: 20px; margin-bottom: 70px;">
-            <div class="tl-origin-photo">
-              <img src="images/tfe.png" alt="Nick Paladino recording The Frictionless Experience podcast">
-            </div>
-            <div class="tl-dates" style="margin-top: 8px;">2023 ></div>
-            <div class="tl-company">The Frictionless<br>Experience</div>
-            <div class="tl-role">Co-Host / Podcast</div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="page-num">3 <span>Nick Paladino — Portfolio</span></div>
-</section>
-
-
-<!-- SLIDE 3: CURRENT ROLE -->
-<section class="slide" id="slide-3">
-  <div class="slide-inner">
-    <div class="section-label fade-in">
-      <span class="section-number">02</span>
-      <span class="section-pipe"></span>
-      <div class="section-title">Current Role &<br>Activities</div>
-    </div>
-
-    <div class="venn-container fade-in fade-in-delay-1">
-      <div class="venn-diagram">
-        <div class="venn-circle" style="width: 220px; height: 220px; top: 10px; left: 10px;">
-          <span class="venn-label" style="position: relative; top: -30px; left: -20px;">PRODUCT</span>
-        </div>
-        <div class="venn-circle" style="width: 180px; height: 180px; top: 0; left: 160px;">
-          <span class="venn-label" style="position: relative; top: -25px; left: 15px;">SALES</span>
-        </div>
-        <div class="venn-circle" style="width: 200px; height: 200px; top: 120px; left: 80px;">
-          <span class="venn-label" style="position: relative; top: 35px;">EXPERIENCE</span>
-        </div>
-        <div class="venn-center" style="top: 108px; left: 148px;">
-          NP
-        </div>
-      </div>
-
-      <div class="role-description">
-        <p>Part of the Blue Triangle team — the only platform purpose-built for Continuous Experience Optimization powered by Business Outcomes. Leading solutions engineering and product strategy.</p>
-        <p>Recognized in the 2024 & 2025 Gartner® Magic Quadrant™ for Digital Experience Monitoring.</p>
-
-        <ul class="capability-list">
-          <li>Digital Experience Analytics</li>
-          <li>Customer Journey Optimization</li>
-          <li>Site Performance & Speed</li>
-          <li>Conversion Rate Optimization</li>
-          <li>Revenue Impact Quantification</li>
-          <li>Enterprise Solutions Engineering</li>
-          <li>Friction Identification & Resolution</li>
-          <li>Real User Monitoring (RUM)</li>
-          <li>A/B Testing & Experimentation</li>
-          <li>Product-Led Growth Strategy</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Revenue Attribution Method -->
-    <div class="revenue-method fade-in fade-in-delay-2">
-      <div class="revenue-method-header">
-        <div class="revenue-method-label">Data Science Innovation</div>
-        <h3 class="revenue-method-title">Revenue Change Attribution Model</h3>
-        <p class="revenue-method-desc">Built a proprietary method using data science to decompose <em>why</em> revenue changes — breaking down the signal into five distinct influences:</p>
-      </div>
-      <div class="revenue-factors">
-        <div class="revenue-factor">
-          <div class="rf-number">01</div>
-          <div class="rf-name">Performance</div>
-          <div class="rf-desc">Site speed & load time impact on conversion</div>
-        </div>
-        <div class="revenue-factor">
-          <div class="rf-number">02</div>
-          <div class="rf-name">Stability</div>
-          <div class="rf-desc">Errors, outages & reliability affecting revenue</div>
-        </div>
-        <div class="revenue-factor">
-          <div class="rf-number">03</div>
-          <div class="rf-name">Traffic</div>
-          <div class="rf-desc">Volume shifts & channel mix changes</div>
-        </div>
-        <div class="revenue-factor">
-          <div class="rf-number">04</div>
-          <div class="rf-name">Average Order Value</div>
-          <div class="rf-desc">Cart composition & pricing influence</div>
-        </div>
-        <div class="revenue-factor">
-          <div class="rf-number">05</div>
-          <div class="rf-name">Intent</div>
-          <div class="rf-desc">User motivation & purchase readiness signals</div>
-        </div>
-      </div>
-    </div>
-</section>
-
-<!-- SLIDE 4: KEY INITIATIVES -->
-<section class="slide" id="slide-4">
-  <div class="slide-inner">
-    <div class="section-label fade-in">
-      <span class="section-number">03</span>
-      <span class="section-pipe"></span>
-      <div class="section-title">Key Initiatives<br>& Impact</div>
-    </div>
-
-    <div class="initiatives-layout fade-in fade-in-delay-1">
-      <div class="initiatives-desc">
-        <p>Throughout my career, I've led and contributed to multiple initiatives that drive digital experience outcomes — from building engineering teams to quantifying the revenue cost of friction for Fortune 500 retailers. These efforts span product development, thought leadership, and strategic partnerships.</p>
-      </div>
-      <div class="initiatives-list">
-        <div class="initiative-item">GARTNER MAGIC QUADRANT RECOGNITION</div>
-        <div class="initiative-item">FRICTION QUANTIFIED ASSESSMENTS</div>
-        <div class="initiative-item">SOLUTIONS ENGINEERING LEADERSHIP</div>
-        <div class="initiative-item">ENTERPRISE RETAIL PARTNERSHIPS</div>
-        <div class="initiative-item">CUSTOMER JOURNEY ANALYTICS</div>
-        <div class="initiative-item">PODCAST THOUGHT LEADERSHIP</div>
-        <div class="initiative-item">PRODUCT ENGINEERING DIRECTION</div>
-        <div class="initiative-item">CONVERSION OPTIMIZATION</div>
-        <div class="initiative-item">REVENUE IMPACT MODELING</div>
-        <div class="initiative-item">DIGITAL EXPERIENCE MONITORING</div>
-      </div>
-    </div>
-  </div>
-  <div class="page-num">5 <span>Nick Paladino — Portfolio</span></div>
-</section>
-
-<!-- SLIDE 5: PROCESS -->
-<section class="slide" id="slide-5">
-  <div class="slide-inner">
-    <div class="section-label fade-in">
-      <span class="section-number">04</span>
-      <span class="section-pipe"></span>
-      <div class="section-title">Digital Experience<br>Process</div>
-    </div>
-
-    <div style="border-left: 3px solid var(--gray-300); padding-left: 24px; margin-bottom: 40px; max-width: 650px;" class="fade-in fade-in-delay-1">
-      <p style="font-size: 14px; color: var(--gray-500); line-height: 1.75; font-style: italic;">
-        I didn't start in tech — I studied cinematography and filmmaking at the <strong style="color:var(--gray-600);font-style:normal;">New York Film Academy</strong> and earned a degree in Telecommunication & Film with a Business focus at the <strong style="color:var(--gray-600);font-style:normal;">University of Alabama</strong>. Storytelling, light, and visual composition were my first language. That lens — understanding audience, narrative flow, and emotional impact — is what I bring to every digital experience I touch.
-      </p>
-    </div>
-
-    <!-- Overlapping circles -->
-    <div class="process-container fade-in fade-in-delay-1">
-      <svg viewBox="0 0 900 260" width="100%" style="max-width: 900px;">
-        <!-- Circle outlines, overlapping -->
-        <circle cx="140" cy="120" r="95" fill="none" stroke="#111" stroke-width="2"/>
-        <circle cx="300" cy="130" r="110" fill="none" stroke="#111" stroke-width="2"/>
-        <circle cx="470" cy="110" r="100" fill="none" stroke="#111" stroke-width="2"/>
-        <circle cx="620" cy="125" r="85" fill="none" stroke="#111" stroke-width="2"/>
-        <circle cx="760" cy="120" r="75" fill="none" stroke="#111" stroke-width="2"/>
-        <!-- Labels -->
-        <text x="140" y="125" text-anchor="middle" font-family="Inter" font-weight="700" font-size="19" fill="#111">Discover</text>
-        <text x="300" y="135" text-anchor="middle" font-family="Inter" font-weight="700" font-size="19" fill="#111">Define</text>
-        <text x="470" y="115" text-anchor="middle" font-family="Inter" font-weight="700" font-size="19" fill="#111">Design</text>
-        <text x="620" y="130" text-anchor="middle" font-family="Inter" font-weight="700" font-size="19" fill="#111">Iterate</text>
-        <text x="760" y="125" text-anchor="middle" font-family="Inter" font-weight="700" font-size="19" fill="#111">Improve</text>
-      </svg>
-    </div>
-
-    <div class="process-details fade-in fade-in-delay-2">
-      <div class="process-detail-col">
-        <h4>Discover</h4>
-        <p>Business & context immersion. Identify stakeholder goals. Competitive research & trends analysis. Empathize with users' needs. Analyze data & behaviors.</p>
-      </div>
-      <div class="process-detail-col">
-        <h4>Define</h4>
-        <p>Define the experience framework. Map architecture, journeys & flows. Identify key personas. Workshop & brainstorm with teams. Prioritize features with stakeholders.</p>
-      </div>
-      <div class="process-detail-col">
-        <h4>Design</h4>
-        <p>Design the full experience. Build a design language and system. Provide annotated wireframes. Deliver specifications for engineering. Build interactive prototypes.</p>
-      </div>
-      <div class="process-detail-col">
-        <h4>Iterate</h4>
-        <p>Test the designed experience. Analyze user behavior. Optimize design outcomes. Handover to engineering team and QA the experience end-to-end.</p>
-      </div>
-      <div class="process-detail-col">
-        <h4>Improve</h4>
-        <p>Optimize the experience. Support launches, audit results. Identify improvements & recommend new feature launches. Iterate on the workflow and retrospect.</p>
-      </div>
-    </div>
-  </div>
-  <div class="page-num">6 <span>Nick Paladino — Portfolio</span></div>
-</section>
-
-<!-- SLIDE 6: BRANDS -->
-<section class="slide" id="slide-6">
-  <div class="slide-inner">
-    <div class="section-label fade-in">
-      <span class="section-number">05</span>
-      <span class="section-pipe"></span>
-      <div class="section-title">Impact<br>at Scale</div>
-    </div>
-    <p style="font-size: 14px; color: var(--gray-500); margin-bottom: 16px; max-width: 600px; line-height: 1.7;" class="fade-in fade-in-delay-1">The digital experiences I've influenced span some of the world's largest and most recognizable brands — here's the scale of that impact across industries.</p>
-
-    <div class="fade-in fade-in-delay-1" style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 36px;">
-      <div style="display: inline-flex; align-items: center; gap: 14px; background: var(--black); color: var(--white); padding: 14px 28px;">
-        <span style="font-size: 36px; font-weight: 900; letter-spacing: -1px;">30+</span>
-        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; line-height: 1.4; opacity: 0.7;">Fortune 500<br>Companies</span>
-      </div>
-      <div style="display: inline-flex; align-items: center; gap: 14px; background: var(--black); color: var(--white); padding: 14px 28px;">
-        <span style="font-size: 36px; font-weight: 900; letter-spacing: -1px;">$1.9B</span>
-        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; line-height: 1.4; opacity: 0.7;">Measurable impact driven<br>by execution-ready insights</span>
-      </div>
-      <div style="display: inline-flex; align-items: center; gap: 14px; background: var(--black); color: var(--white); padding: 14px 28px;">
-        <span style="font-size: 36px; font-weight: 900; letter-spacing: -1px;">$350M</span>
-        <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; line-height: 1.4; opacity: 0.7;">Realized<br>bottom-line impact</span>
-      </div>
-    </div>
-
-    <!-- Aggregate scale stats -->
-    <div class="scale-stats-row fade-in fade-in-delay-2">
-      <div style="border-left: 2px solid var(--black); padding: 20px 24px;">
-        <div style="font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1;">$1.8T+</div>
-        <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-500); margin-top: 8px; line-height: 1.5;">Combined Annual Revenue<br>of Brands Influenced</div>
-      </div>
-      <div style="border-left: 2px solid var(--black); padding: 20px 24px;">
-        <div style="font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1;">50K+</div>
-        <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-500); margin-top: 8px; line-height: 1.5;">Retail Locations<br>Worldwide</div>
-      </div>
-      <div style="border-left: 2px solid var(--black); padding: 20px 24px;">
-        <div style="font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1;">500M+</div>
-        <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-500); margin-top: 8px; line-height: 1.5;">Monthly Digital<br>Visitors Impacted</div>
-      </div>
-      <div style="border-left: 2px solid var(--black); padding: 20px 24px;">
-        <div style="font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1;">2.5M+</div>
-        <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-500); margin-top: 8px; line-height: 1.5;">Employees Across<br>Client Organizations</div>
-      </div>
-    </div>
-
-    <!-- Industry sector stats -->
-    <div class="sector-cards-grid fade-in fade-in-delay-3">
-      <div style="border: 1px solid var(--gray-200); padding: 28px 24px; transition: all 0.25s;" onmouseover="this.style.borderColor='var(--black)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gray-200)';this.style.transform='none'">
-        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--gray-400); margin-bottom: 14px;">Retail & E-Commerce</div>
-        <div style="font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px;">$1.2T+</div>
-        <div style="font-size: 12px; color: var(--gray-500); line-height: 1.6;">Combined revenue across major retailers — from the #1 global retailer to top home improvement, sporting goods, grocery, pet, beauty, and fashion brands with 30,000+ combined store locations.</div>
-      </div>
-      <div style="border: 1px solid var(--gray-200); padding: 28px 24px; transition: all 0.25s;" onmouseover="this.style.borderColor='var(--black)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gray-200)';this.style.transform='none'">
-        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--gray-400); margin-bottom: 14px;">Finance & Insurance</div>
-        <div style="font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px;">$300B+</div>
-        <div style="font-size: 12px; color: var(--gray-500); line-height: 1.6;">Combined assets & revenue across leading financial institutions, credit bureaus, and insurance providers — serving hundreds of millions of consumers and businesses globally.</div>
-      </div>
-      <div style="border: 1px solid var(--gray-200); padding: 28px 24px; transition: all 0.25s;" onmouseover="this.style.borderColor='var(--black)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gray-200)';this.style.transform='none'">
-        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--gray-400); margin-bottom: 14px;">Healthcare & Pharma</div>
-        <div style="font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px;">100M+</div>
-        <div style="font-size: 12px; color: var(--gray-500); line-height: 1.6;">Patients and members served by healthcare & pharmaceutical clients — including top pharmacy chains, managed care organizations, and global pharmaceutical leaders.</div>
-      </div>
-      <div style="border: 1px solid var(--gray-200); padding: 28px 24px; transition: all 0.25s;" onmouseover="this.style.borderColor='var(--black)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gray-200)';this.style.transform='none'">
-        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--gray-400); margin-bottom: 14px;">Travel & Hospitality</div>
-        <div style="font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px;">18K+</div>
-        <div style="font-size: 12px; color: var(--gray-500); line-height: 1.6;">Properties & vessels across global hotel chains and cruise lines — reaching millions of travelers annually through digital booking and on-property experiences.</div>
-      </div>
-      <div style="border: 1px solid var(--gray-200); padding: 28px 24px; transition: all 0.25s;" onmouseover="this.style.borderColor='var(--black)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gray-200)';this.style.transform='none'">
-        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--gray-400); margin-bottom: 14px;">Technology & Telecom</div>
-        <div style="font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px;">$250B+</div>
-        <div style="font-size: 12px; color: var(--gray-500); line-height: 1.6;">Combined revenue across global technology manufacturers, telecommunications providers, and cybersecurity companies — powering enterprise and consumer digital infrastructure.</div>
-      </div>
-      <div style="border: 1px solid var(--gray-200); padding: 28px 24px; transition: all 0.25s;" onmouseover="this.style.borderColor='var(--black)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--gray-200)';this.style.transform='none'">
-        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--gray-400); margin-bottom: 14px;">Media & Entertainment</div>
-        <div style="font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px;">200M+</div>
-        <div style="font-size: 12px; color: var(--gray-500); line-height: 1.6;">Global subscribers and customers across media, entertainment, and education giants — spanning streaming, theme parks, publishing platforms, and digital content ecosystems.</div>
-      </div>
-    </div>
-  </div>
-  <div class="page-num">7 <span>Nick Paladino — Portfolio</span></div>
-</section>
-
-<!-- SLIDE 7: PODCAST DEEP DIVE -->
-<section class="slide podcast-slide" id="slide-7">
-  <div class="slide-inner">
-    <div class="section-label fade-in">
-      <span class="section-number">06</span>
-      <span class="section-pipe"></span>
-      <div class="section-title">The Frictionless<br>Experience</div>
-    </div>
-
-    <div class="podcast-grid fade-in fade-in-delay-1">
-      <div class="podcast-info">
-        <h3>The podcast where we lay waste to digital friction.</h3>
-        <p>For leaders who want more out of their existing online presence. Conversations with innovative leaders and industry experts who refuse to settle for mediocrity in the digital realm.</p>
-        <p>Co-hosted with Chuck Moxley. Sponsored by Blue Triangle.</p>
-        <div class="podcast-links">
-          <a href="https://open.spotify.com/show/2ZTO8YeX3d9IDxTrGe6rb7" target="_blank" class="podcast-link">Spotify</a>
-          <a href="https://www.youtube.com/@TheFrictionlessExperience" target="_blank" class="podcast-link">YouTube</a>
-          <a href="https://www.thefrictionlessexperience.com" target="_blank" class="podcast-link">Website</a>
-        </div>
-      </div>
-      <div>
-        <div class="podcast-stats">
-          <div class="stat-box">
-            <div class="num">60+</div>
-            <div class="lbl">Episodes</div>
-          </div>
-          <div class="stat-box">
-            <div class="num">40+</div>
-            <div class="lbl">Guest Leaders</div>
-          </div>
-          <div class="stat-box">
-            <div class="num">2+</div>
-            <div class="lbl">Years Running</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="page-num" style="color: rgba(255,255,255,0.3);">8 <span>Nick Paladino — Portfolio</span></div>
-</section>
-
-<!-- SLIDE 8: PODCAST GUEST BRANDS -->
-<section class="slide" id="slide-8">
-  <div class="slide-inner">
-    <div class="section-label fade-in">
-      <span class="section-number">06</span>
-      <span class="section-pipe"></span>
-      <div class="section-title">Podcast Guests<br><span style="font-size:16px;font-weight:400;color:var(--gray-500);letter-spacing:0;">The Frictionless Experience</span></div>
-    </div>
-
-    <p style="font-size: 14px; color: var(--gray-500); margin-bottom: 40px; max-width: 620px; line-height: 1.7;" class="fade-in fade-in-delay-1">Leaders from these brands have joined us on the podcast to share how they turn digital challenges into business and user experience victories.</p>
-
-    <div class="podcast-guests-grid fade-in fade-in-delay-2">
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Walmart</div>
-        <div class="pgc-person">Vijay Jayaraman</div>
-        <div class="pgc-title">Sr. Director, Product Management</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">American Eagle</div>
-        <div class="pgc-person">Catherine Gignac</div>
-        <div class="pgc-title">Director, Digital Experience Design</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">American Eagle</div>
-        <div class="pgc-person">Naveen Gunti</div>
-        <div class="pgc-title">VP, Head of Logistics, Digital & Technology</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">GoPro</div>
-        <div class="pgc-person">Kacey Sharrett</div>
-        <div class="pgc-title">VP, Direct to Consumer</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">FanDuel</div>
-        <div class="pgc-person">Scott Smith</div>
-        <div class="pgc-title">Former Product Director, Organic Growth</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Petco</div>
-        <div class="pgc-person">Angel Singh</div>
-        <div class="pgc-title">VP, Customer Experience</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Dunkin' / Staples</div>
-        <div class="pgc-person">Adam Candela</div>
-        <div class="pgc-title">Former Director of Digital Retail & Marketing</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">U.S. Bank</div>
-        <div class="pgc-person">Shawn Sheely</div>
-        <div class="pgc-title">Former VP, Head of Experience in Technology</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Verizon</div>
-        <div class="pgc-person">Amit Singh</div>
-        <div class="pgc-title">Digital & Multichannel Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Samsara</div>
-        <div class="pgc-person">Emma Sopadjieva</div>
-        <div class="pgc-title">Customer Experience Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Nationwide</div>
-        <div class="pgc-person">Bobbi Jo Allan</div>
-        <div class="pgc-title">Innovation Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Specialized Bicycles</div>
-        <div class="pgc-person">Nora Arzoumanian</div>
-        <div class="pgc-title">E-commerce Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Casper</div>
-        <div class="pgc-person">Joe Megibow</div>
-        <div class="pgc-title">Former CEO</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">L'Oréal / YSL Beauty</div>
-        <div class="pgc-person">Jean-Louis Hé</div>
-        <div class="pgc-title">Director, Digital & E-commerce</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Lowe's</div>
-        <div class="pgc-person">Mike Shady</div>
-        <div class="pgc-title">Former VP</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Microsoft</div>
-        <div class="pgc-person">Zehra Syeda-Sarwat</div>
-        <div class="pgc-title">CX Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Ally Financial</div>
-        <div class="pgc-person">Sathish Muthukrishnan</div>
-        <div class="pgc-title">Banking Technology Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Google</div>
-        <div class="pgc-person">Barry Pollard</div>
-        <div class="pgc-title">Core Web Vitals Expert</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Philips</div>
-        <div class="pgc-person">Dr. Tina Manoharan</div>
-        <div class="pgc-title">AI in Digital Healthcare</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Hewlett Packard</div>
-        <div class="pgc-person">Noopur Bakshi</div>
-        <div class="pgc-title">Customer Service & AI Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Dell</div>
-        <div class="pgc-person">Geoff Colon</div>
-        <div class="pgc-title">Design & Data Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Kendra Scott</div>
-        <div class="pgc-person">Jared Miller</div>
-        <div class="pgc-title">Data Storytelling & Personalization</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Fossil Group</div>
-        <div class="pgc-person">Chayse Joubert</div>
-        <div class="pgc-title">Omnichannel Experience</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Eventbrite</div>
-        <div class="pgc-person">Tutu Adenle</div>
-        <div class="pgc-title">UX Design Leader</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Carhartt</div>
-        <div class="pgc-person">Bruce Shields</div>
-        <div class="pgc-title">Customer Insights</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">PitchBook</div>
-        <div class="pgc-person">Rafael Carranza</div>
-        <div class="pgc-title">Ex-Microsoft, Ex-Amazon</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Equifax</div>
-        <div class="pgc-person">Joe Walker</div>
-        <div class="pgc-title">Customer Friction Expert</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">1-800-Flowers</div>
-        <div class="pgc-person">Hal Siegel</div>
-        <div class="pgc-title">Personalization & UX</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Wyndham Hotels</div>
-        <div class="pgc-person">Kenny Goldshvartz</div>
-        <div class="pgc-title">Digital Experience</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Rainbow Shops</div>
-        <div class="pgc-person">David Cost</div>
-        <div class="pgc-title">Mobile Checkout & Shipping</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Kyndryl</div>
-        <div class="pgc-person">Dennis Perpetua</div>
-        <div class="pgc-title">Employee Experience</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">SCADpro</div>
-        <div class="pgc-person">Paul Stonick</div>
-        <div class="pgc-title">Design & Business Value</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Slickdeals</div>
-        <div class="pgc-person">Mike Lively</div>
-        <div class="pgc-title">Seasonal Traffic Strategy</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">HD Supply</div>
-        <div class="pgc-person">Jason Abdo</div>
-        <div class="pgc-title">Product Management</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">True Classic</div>
-        <div class="pgc-person">Breanna Moreno</div>
-        <div class="pgc-title">Community & Brand</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">CARFAX</div>
-        <div class="pgc-person">Nakul Goyal</div>
-        <div class="pgc-title">Product — MVP to MLP</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Ralph Lauren / Tiffany / Funko</div>
-        <div class="pgc-person">Mehdi Rizvi</div>
-        <div class="pgc-title">Operational CX</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Capital One</div>
-        <div class="pgc-person">Amir Rozenberg</div>
-        <div class="pgc-title">Cost of Friction in UX</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">Best Buy / Amazon / Walgreens</div>
-        <div class="pgc-person">Robert Neer & Brent Van Wieringen</div>
-        <div class="pgc-title">Retail Transformation</div>
-      </div>
-      <div class="podcast-guest-card">
-        <div class="pgc-brand">The Good</div>
-        <div class="pgc-person">Jon MacDonald</div>
-        <div class="pgc-title">Conversion Strategy</div>
-      </div>
-    </div>
-  </div>
-  <div class="page-num">9 <span>Nick Paladino — Portfolio</span></div>
-</section>
-
-<!-- SLIDE 9: CONTACT -->
-<section class="slide contact-slide" id="slide-9">
-  <div class="slide-inner" style="text-align: center;">
-    <div class="contact-name fade-in">Nick Paladino</div>
-    <div class="contact-tagline fade-in fade-in-delay-1">Let's eliminate friction together</div>
-    <div class="contact-links fade-in fade-in-delay-2">
-      <a href="https://www.linkedin.com/in/npaladino/" target="_blank" class="contact-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        LinkedIn
-      </a>
-      <a href="https://www.thefrictionlessexperience.com" target="_blank" class="contact-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z"/></svg>
-        thefrictionlessexperience.com
-      </a>
-      <a href="https://bluetriangle.com" target="_blank" class="contact-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 2 22 22 22"/></svg>
-        Blue Triangle
-      </a>
-    </div>
-  </div>
-  <div class="page-num" style="color: rgba(255,255,255,0.3);">10 <span>Nick Paladino — Portfolio</span></div>
-</section>
+<div id="app"></div>
 
 <script>
-// Scroll-based fade-in animation
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.15 });
+(function(){
 
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  var HOLES = [
+    {n:1,  par:5, hc:13, dist:30},
+    {n:2,  par:4, hc:1,  dist:40},
+    {n:3,  par:3, hc:7,  dist:30},
+    {n:4,  par:4, hc:15, dist:35},
+    {n:5,  par:3, hc:3,  dist:20},
+    {n:6,  par:4, hc:5,  dist:45},
+    {n:7,  par:5, hc:11, dist:30},
+    {n:8,  par:4, hc:17, dist:35},
+    {n:9,  par:4, hc:9,  dist:40},
+    {n:10, par:4, hc:8,  dist:25},
+    {n:11, par:3, hc:4,  dist:30},
+    {n:12, par:5, hc:10, dist:45},
+    {n:13, par:4, hc:6,  dist:50},
+    {n:14, par:3, hc:12, dist:20},
+    {n:15, par:4, hc:16, dist:35},
+    {n:16, par:4, hc:2,  dist:30},
+    {n:17, par:5, hc:18, dist:30},
+    {n:18, par:4, hc:14, dist:40}
+  ];
 
-// Nav dots
-const slides = document.querySelectorAll('.slide');
-const navDots = document.getElementById('navDots');
+  var PLAYER_COLORS = ['#1d3557','#bc4749','#c9a227','#2a9d8f'];
 
-slides.forEach((slide, i) => {
-  const dot = document.createElement('div');
-  dot.className = 'nav-dot';
-  dot.addEventListener('click', () => {
-    slide.scrollIntoView({ behavior: 'smooth' });
-  });
-  navDots.appendChild(dot);
-});
+  var HOUSE_RULES = [
+    'Par 3 – Putting. Putt two balls from the tee. Count all putts to make both.',
+    'Par 4 – Chip & Putt. Lying 2, as if a GIR was missed. Chip and 1 putt = 4/par.',
+    'Par 5 – Putting. Putt three balls from the tee. Count all putts to make all three.',
+    'Hitting concrete = penalty.',
+    'Obstructed swing = free relief, same lie, no closer to the hole, close to the same angle.',
+    'Ball ends up in the wrong hole = free drop right next to that hole, in the direction of the target hole.',
+    'Place a marker for par 4s.  All players use this marker for all holes.',
+    'On Par 4s only, you must chip with a wedge if you are on the fringe/fairway/rough for any shots in the hole.' 
+  ];
 
-const dotEls = navDots.querySelectorAll('.nav-dot');
+  var state = {
+    view: 'setup',           // setup | play | card
+    cardTab: 'scorecard',    // scorecard | match
+    currentHole: 1,
+    numOpponents: 1,
+    rulesOpen: false,
+    players: [
+      {id:0, name:'You'},
+      {id:1, name:'Opponent 1'}
+    ],
+    scores: {}  // scores[holeNum][playerId] = number|null
+  };
 
-const slideObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const idx = Array.from(slides).indexOf(entry.target);
-      dotEls.forEach((d, i) => {
-        d.classList.toggle('active', i === idx);
-        // Invert dots on dark slides
-      const isDark = entry.target.classList.contains('hero-slide') ||
-                       entry.target.classList.contains('podcast-slide') ||
-                       entry.target.classList.contains('contact-slide');
-        if (i === idx && isDark) {
-          d.classList.add('invert');
-        } else {
-          d.classList.remove('invert');
-        }
-      });
-    }
-  });
-}, { threshold: 0.5 });
+  HOLES.forEach(function(h){ state.scores[h.n] = {}; });
 
-slides.forEach(s => slideObserver.observe(s));
+  function holeByNum(n){ return HOLES.filter(function(h){return h.n===n;})[0]; }
 
-// Auto-scroll timeline on mobile
-if (window.innerWidth <= 768) {
-  const timelineSlide = document.getElementById('slide-2');
-  const timelineContainer = timelineSlide ? timelineSlide.querySelector('.timeline-container') : null;
-  if (timelineContainer) {
-    let hasAutoScrolled = false;
-    const timelineObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !hasAutoScrolled) {
-          hasAutoScrolled = true;
-          // Wait for fade-in to finish before scrolling
-          setTimeout(() => {
-            const maxScroll = timelineContainer.scrollWidth - timelineContainer.clientWidth;
-            const duration = 3000; // 3 seconds
-            const startTime = performance.now();
-            function animateScroll(currentTime) {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              // Ease-in-out for smooth feel
-              const ease = progress < 0.5
-                ? 2 * progress * progress
-                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-              timelineContainer.scrollLeft = ease * maxScroll;
-              if (progress < 1) {
-                requestAnimationFrame(animateScroll);
-              }
-            }
-            requestAnimationFrame(animateScroll);
-          }, 800);
-        }
-      });
-    }, { threshold: 0.4 });
-    timelineObserver.observe(timelineSlide);
+  function formatRule(par){
+    if(par===3) return {label:'Putting · 2 balls', cls:'p3', rule:'Putt two balls from the tee. Score is total putts to hole out both balls (minimum 2).'};
+    if(par===5) return {label:'Putting · 3 balls', cls:'p5', rule:'Putt three balls from the tee. Score is total putts to hole out all three (minimum 3).'};
+    return {label:'Chip & putt', cls:'p4', rule:'Lying 2, as if a green in regulation was missed. One chip plus one putt scores par (4).'};
   }
-}
 
-// Smooth anchor links for agenda
-document.querySelectorAll('.agenda-item').forEach(item => {
-  item.addEventListener('click', (e) => {
-    e.preventDefault();
-    const target = document.querySelector(item.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
-  });
-});
+  // Two physical greens, front nine and back nine, each with 4 cups.
+  // On the actual course, the par-3/5 (putting-only) holes each have their
+  // own dedicated cup and their own start spot right on the green. The
+  // par-4 chip holes aim at one of the same four cups from up at the deck.
+  var GREEN_OUTLINE = 'M60,40 C86,40 100,54 100,72 C100,80 96,86 92,90 ' +
+    'C88,94 88,96 88,100 C88,104 88,106 92,110 C96,114 100,120 100,128 ' +
+    'C100,141 86,155 60,155 C34,155 20,141 20,128 C20,120 24,114 28,110 ' +
+    'C32,106 32,104 32,100 C32,96 32,94 28,90 C24,86 20,80 20,72 ' +
+    'C20,54 34,40 60,40 Z';
+
+  var FRONT_GREEN_PINS = [
+    {n:5,  x:44, y:71},
+    {n:7,  x:64, y:96},
+    {n:1,  x:44, y:130},
+    {n:3,  x:84, y:130}
+  ];
+  var BACK_GREEN_PINS = [
+    {n:14, x:44, y:71},
+    {n:17, x:64, y:96},
+    {n:11, x:44, y:130},
+    {n:12, x:84, y:130}
+  ];
+  var START_POS = {
+    7:{x:84,y:140}, 1:{x:80,y:80}, 3:{x:46,y:80}, 5:{x:55,y:140},
+    12:{x:52,y:62}, 11:{x:65,y:62}, 17:{x:38,y:80}, 14:{x:90,y:118}
+  };
+
+  function pinsForHole(hole){ return hole.n<=9 ? FRONT_GREEN_PINS : BACK_GREEN_PINS; }
+
+  // Explicit cup each chip (par-4) hole aims at, since with only 4 cups
+  // per green the modulo fallback below never reaches every one of them.
+  // Index into that green's pin array: 0 = top-left, 1 = top-right,
+  // 2 = bottom-left, 3 = bottom-right.
+  var CHIP_TARGETS = {
+    2:0, 4:1, 6:2, 8:3, 9:1,
+    10:0, 13:2, 15:1, 16:0, 18:3
+  };
+
+  function pinIndexForHole(hole){
+    var pins = pinsForHole(hole);
+    for(var i=0;i<pins.length;i++){ if(pins[i].n===hole.n) return i; }
+    if(CHIP_TARGETS.hasOwnProperty(hole.n)) return CHIP_TARGETS[hole.n];
+    return hole.n % pins.length;
+  }
+
+  function greenGraphic(pins, activeIdx, accent, flagScale){
+    flagScale = flagScale || 1;
+    var svg = '<path d="'+GREEN_OUTLINE+'" fill="#dfe9df" stroke="'+accent+'" stroke-width="1.5" opacity="0.95"/>';
+    pins.forEach(function(pin, i){
+      var active = i===activeIdx;
+      var stemLen = (active ? 22 : 12) * flagScale;
+      var flagLen = (active ? 12 : 6) * flagScale;
+      var flagH = (active ? 6 : 3) * flagScale;
+      var col = active ? accent : 'rgba(23,32,26,0.28)';
+      var dotR = (active ? 2.6 : 2) * flagScale;
+      svg += '<circle cx="'+pin.x+'" cy="'+pin.y+'" r="'+dotR+'" fill="'+(active?'#17201a':col)+'"/>';
+      svg += '<line x1="'+pin.x+'" y1="'+pin.y+'" x2="'+pin.x+'" y2="'+(pin.y-stemLen)+'" stroke="'+(active?'#17201a':col)+'" stroke-width="'+(active?1.5:1)+'"/>';
+      svg += '<path d="M'+pin.x+' '+(pin.y-stemLen)+' L'+pin.x+' '+(pin.y-stemLen-flagH)+' L'+(pin.x+flagLen)+' '+(pin.y-stemLen-flagH/2)+' Z" fill="'+col+'"/>';
+    });
+    return svg;
+  }
+
+  // Par 3s and par 5s are putted from start to finish, entirely on the
+  // green: show the whole green, all 4 cups, and this hole's own start
+  // spot with a dashed putt line to its own cup.
+  function svgGreenAllPins(hole){
+    var accent = hole.par===3 ? 'var(--gold)' : 'var(--flag)';
+    var pins = pinsForHole(hole);
+    var activeIdx = pinIndexForHole(hole);
+    var pin = pins[activeIdx];
+    var start = START_POS[hole.n];
+    return '<svg width="120" height="160" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="'+GREEN_OUTLINE+'" fill="#dfe9df" stroke="'+accent+'" stroke-width="1.5" opacity="0.95"/>' +
+      '<line x1="'+start.x+'" y1="'+start.y+'" x2="'+pin.x+'" y2="'+pin.y+'" stroke="'+accent+'" stroke-width="2" stroke-dasharray="4,4" opacity="0.9"/>' +
+      pins.map(function(p,i){
+        var active = i===activeIdx, col = active ? accent : 'rgba(23,32,26,0.28)';
+        var stemLen=(active?22:12), flagLen=(active?12:6), flagH=(active?6:3), dotR=(active?2.6:2);
+        return '<circle cx="'+p.x+'" cy="'+p.y+'" r="'+dotR+'" fill="'+(active?'#17201a':col)+'"/>' +
+          '<line x1="'+p.x+'" y1="'+p.y+'" x2="'+p.x+'" y2="'+(p.y-stemLen)+'" stroke="'+(active?'#17201a':col)+'" stroke-width="'+(active?1.5:1)+'"/>' +
+          '<path d="M'+p.x+' '+(p.y-stemLen)+' L'+p.x+' '+(p.y-stemLen-flagH)+' L'+(p.x+flagLen)+' '+(p.y-stemLen-flagH/2)+' Z" fill="'+col+'"/>';
+      }).join('') +
+      '<circle cx="'+start.x+'" cy="'+start.y+'" r="4" fill="var(--cream)" stroke="'+accent+'" stroke-width="2"/>' +
+    '</svg>';
+  }
+
+  // Whole-yard view for chip & putt holes: tee at the top of the yard,
+  // dashed line of flight the full distance down to the green, landing on
+  // that hole's actual cup among the 4 on its green.
+  function svgWholeYard(hole){
+    var accent = 'var(--navy)';
+    var pins = pinsForHole(hole);
+    var pinIdx = pinIndexForHole(hole);
+    var pin = pins[pinIdx];
+    var scale = 0.34, tx = 60 - 60*scale, ty = 108 - 90*scale;
+    var targetX = tx + pin.x*scale, targetY = ty + pin.y*scale;
+    return '' +
+    '<svg width="120" height="170" viewBox="0 0 120 170" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect x="10" y="6" width="100" height="10" fill="none" stroke="rgba(23,32,26,0.35)" stroke-width="1.5"/>' +
+      '<line x1="10" y1="16" x2="10" y2="150" stroke="rgba(23,32,26,0.2)" stroke-width="1"/>' +
+      '<line x1="110" y1="16" x2="110" y2="150" stroke="rgba(23,32,26,0.2)" stroke-width="1"/>' +
+      '<line x1="60" y1="26" x2="'+targetX+'" y2="'+targetY+'" stroke="'+accent+'" stroke-width="2" stroke-dasharray="5,5" opacity="0.9"/>' +
+      '<circle cx="60" cy="26" r="9" fill="'+accent+'"/>' +
+      '<text x="60" y="30" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="700" fill="#f5f1e4">'+hole.n+'</text>' +
+      '<g transform="translate('+tx+','+ty+') scale('+scale+')">' +
+        greenGraphic(pins, pinIdx, accent, 2.2) +
+      '</g>' +
+    '</svg>';
+  }
+
+  function svgHoleDiagram(hole){
+    return hole.par===4 ? svgWholeYard(hole) : svgGreenAllPins(hole);
+  }
+
+  function render(){
+    var app = document.getElementById('app');
+    var html = brandHeader();
+    if(state.view==='setup') html += renderSetup();
+    else if(state.view==='play') html += renderPlay();
+    else html += renderCard();
+    if(state.rulesOpen) html += renderRulesModal();
+    app.innerHTML = html;
+    bind();
+  }
+
+  function brandHeader(){
+    return '' +
+    '<div class="brand">' +
+      '<div class="brand-title">' +
+        '<svg class="flagmark" viewBox="0 0 24 24" fill="none"><line x1="5" y1="2" x2="5" y2="22" stroke="#f5f1e4" stroke-width="1.6"/><path d="M5 3 L19 6 L5 10 Z" fill="#bc4749"/></svg>' +
+        'Backyard 18' +
+      '</div>' +
+      '<div class="row" style="align-items:center; gap:10px;">' +
+        '<div class="brand-sub">Chip &amp; Putt Scorecard</div>' +
+        '<button class="btn btn-ghost" id="toggleRules" style="padding:6px 12px; font-size:11px;">House Rules</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderRulesModal(){
+    var items = HOUSE_RULES.map(function(r){ return '<li>'+escapeHtml(r)+'</li>'; }).join('');
+    return '' +
+    '<div class="modal-backdrop" id="rulesBackdrop">' +
+      '<div class="modal-sheet">' +
+        '<div class="modal-head">' +
+          '<h3 style="margin:0; font-size:17px;">House Rules</h3>' +
+          '<button class="btn btn-ghost" id="closeRules" style="padding:6px 10px;">Close</button>' +
+        '</div>' +
+        '<ul class="rules-list">'+items+'</ul>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // ---------- SETUP ----------
+  function renderSetup(){
+    var h = '<div class="card">';
+    h += '<h2 style="margin:0 0 4px; font-size:19px;">Set up your round</h2>';
+    h += '<p style="font-size:12.5px; color:rgba(23,32,26,0.6); margin:0 0 14px;">Name your players. Player 1 is tracked head-to-head against each opponent for match play.</p>';
+
+    h += '<label class="field-label">Opponents</label>';
+    h += '<div class="opp-toggle">';
+    [0,1,2,3].forEach(function(i){
+      h += '<button data-opp="'+i+'" class="'+(state.numOpponents===i?'active':'')+'">'+i+'</button>';
+    });
+    h += '</div>';
+
+    h += '<div style="margin-top:14px;">';
+    state.players.slice(0, state.numOpponents+1).forEach(function(p, idx){
+      h += '<div class="player-row">' +
+        '<span class="swatch" style="background:'+PLAYER_COLORS[idx]+'"></span>' +
+        '<input type="text" data-player="'+p.id+'" value="'+escapeHtml(p.name)+'" placeholder="Player name">' +
+      '</div>';
+    });
+    h += '</div>';
+
+    h += '<button class="btn btn-primary btn-block" style="margin-top:16px;" id="startRound">Start round →</button>';
+    h += '</div>';
+    return h;
+  }
+
+  // ---------- PLAY ----------
+  function renderPlay(){
+    var hole = holeByNum(state.currentHole);
+    var fmt = formatRule(hole.par);
+    var activePlayers = state.players.slice(0, state.numOpponents+1);
+
+    var h = '<div class="hole-strip">';
+    HOLES.forEach(function(hh){
+      var filled = activePlayers.every(function(p){ return typeof state.scores[hh.n][p.id] === 'number'; });
+      h += '<div class="hole-dot '+(filled?'filled':'')+' '+(hh.n===state.currentHole?'current':'')+'" data-gohole="'+hh.n+'">'+hh.n+'</div>';
+    });
+    h += '</div>';
+
+    h += '<div class="card">';
+    h += '<div class="hole-head">' +
+      '<div class="hole-num display">'+hole.n+'</div>' +
+      '<div class="hole-meta">PAR <b>'+hole.par+'</b><br>HDCP <b>'+hole.hc+'</b><br>'+hole.dist+' FT</div>' +
+    '</div>';
+    h += '<div class="format-pill '+fmt.cls+'">'+fmt.label+'</div>';
+    h += '<div class="format-rule">'+fmt.rule+'</div>';
+    h += '<div class="diagram-wrap">'+svgHoleDiagram(hole)+'</div>';
+
+    activePlayers.forEach(function(p, idx){
+      var val = state.scores[hole.n][p.id];
+      if(typeof val !== 'number') val = hole.par;
+      h += '<div class="score-line">' +
+        '<div class="pname"><span class="swatch" style="background:'+PLAYER_COLORS[idx]+'"></span>'+escapeHtml(p.name)+'</div>' +
+        '<div class="stepper">' +
+          '<button class="stepbtn" data-adj="-1" data-pid="'+p.id+'">−</button>' +
+          '<div class="scoreval">'+val+'</div>' +
+          '<button class="stepbtn" data-adj="1" data-pid="'+p.id+'">+</button>' +
+        '</div>' +
+      '</div>';
+      state.scores[hole.n][p.id] = val;
+    });
+
+    h += '<div class="nav-buttons">';
+    h += '<button class="btn btn-ghost grow" id="prevHole" '+(state.currentHole===1?'disabled style="opacity:.4"':'')+'>← Prev</button>';
+    if(state.currentHole===18){
+      h += '<button class="btn btn-flag grow" id="viewCard">Scorecard →</button>';
+    } else {
+      h += '<button class="btn btn-primary grow" id="nextHole">Next →</button>';
+    }
+    h += '</div>';
+    h += '</div>';
+
+    h += '<button class="btn btn-ghost btn-block" id="toCard" style="margin-top:2px;">View full scorecard</button>';
+    return h;
+  }
+
+  // ---------- SCORECARD / MATCH PLAY ----------
+  function totalsFor(playerId, holeList){
+    var strokes=0, par=0, played=0;
+    holeList.forEach(function(hh){
+      var v = state.scores[hh.n][playerId];
+      if(typeof v === 'number'){ strokes+=v; par+=hh.par; played++; }
+    });
+    return {strokes:strokes, par:par, played:played};
+  }
+
+  function renderCard(){
+    var activePlayers = state.players.slice(0, state.numOpponents+1);
+    var front = HOLES.slice(0,9), back = HOLES.slice(9,18);
+
+    var h = '<div class="tabs">';
+    h += '<div class="tab '+(state.cardTab==='scorecard'?'active':'')+'" data-tab="scorecard">Scorecard</div>';
+    h += '<div class="tab '+(state.cardTab==='match?'?'':'')+' '+(state.cardTab==='match'?'active':'')+'" data-tab="match">Match Play</div>';
+    h += '</div>';
+
+    if(state.cardTab==='scorecard'){
+      h += '<div class="card"><div class="section-scroll">';
+      h += scoreTable(front, 'OUT', activePlayers);
+      h += '</div></div>';
+      h += '<div class="card"><div class="section-scroll">';
+      h += scoreTable(back, 'IN', activePlayers);
+      h += '</div></div>';
+
+      h += '<div class="card">';
+      h += '<h3 style="margin:0 0 8px; font-size:14px;">Totals</h3>';
+      activePlayers.forEach(function(p, idx){
+        var t = totalsFor(p.id, HOLES);
+        var toPar = t.strokes - t.par;
+        var toParStr = t.played===0 ? '—' : (toPar===0?'E':(toPar>0?'+'+toPar:toPar));
+        h += '<div class="totals-strip">' +
+          '<div class="pname"><span class="swatch" style="background:'+PLAYER_COLORS[idx]+'"></span>'+escapeHtml(p.name)+'</div>' +
+          '<div style="text-align:right;">' +
+            '<div style="font-size:16px; font-weight:700;">'+(t.played? t.strokes : '—')+'</div>' +
+            '<div class="toparlabel">'+(t.played? t.played+'/18 · '+toParStr : 'no scores yet')+'</div>' +
+          '</div>' +
+        '</div>';
+      });
+      h += '</div>';
+    } else {
+      h += renderMatchPlay(activePlayers);
+    }
+
+    h += '<div class="nav-buttons">';
+    h += '<button class="btn btn-ghost grow" id="backToPlay">← Back to play</button>';
+    h += '<button class="btn btn-flag grow" id="resetRound">New round</button>';
+    h += '</div>';
+    return h;
+  }
+
+  function scoreTable(holeList, label, activePlayers){
+    var h = '<table class="scoretable"><thead><tr><th class="rowlabel">Hole</th>';
+    holeList.forEach(function(hh){ h += '<th>'+hh.n+'</th>'; });
+    h += '<th class="total">'+label+'</th></tr>';
+    h += '<tr><th class="rowlabel">Par</th>';
+    var parTotal=0;
+    holeList.forEach(function(hh){ h += '<th>'+hh.par+'</th>'; parTotal+=hh.par; });
+    h += '<th class="total">'+parTotal+'</th></tr></thead><tbody>';
+
+    activePlayers.forEach(function(p, idx){
+      h += '<tr><td class="rowlabel"><span class="swatch" style="background:'+PLAYER_COLORS[idx]+'; display:inline-block; vertical-align:-1px;"></span> '+escapeHtml(p.name)+'</td>';
+      var sum=0, any=false;
+      holeList.forEach(function(hh){
+        var v = state.scores[hh.n][p.id];
+        if(typeof v==='number'){
+          sum+=v; any=true;
+          var diff = v - hh.par;
+          var markCls = diff===0 ? '' : (diff<=-2 ? 'eagle' : diff<0 ? 'under' : 'over');
+          h += '<td class="scorecell"><span class="mark '+markCls+'">'+v+'</span></td>';
+        } else {
+          h += '<td class="scorecell">–</td>';
+        }
+      });
+      h += '<td class="total">'+(any?sum:'–')+'</td></tr>';
+    });
+    h += '</tbody></table>';
+    return h;
+  }
+
+  function renderMatchPlay(activePlayers){
+    var h = '';
+    if(activePlayers.length < 2){
+      h += '<div class="card"><div class="empty">Add at least one opponent on the setup screen to track match play.</div></div>';
+      return h;
+    }
+    var p1 = activePlayers[0];
+    for(var i=1;i<activePlayers.length;i++){
+      var opp = activePlayers[i];
+      var w=0,l=0,ha=0,thru=0;
+      HOLES.forEach(function(hh){
+        var a = state.scores[hh.n][p1.id], b = state.scores[hh.n][opp.id];
+        if(typeof a==='number' && typeof b==='number'){
+          thru++;
+          if(a<b) w++; else if(b<a) l++; else ha++;
+        }
+      });
+      var diff = w-l;
+      var status;
+      if(thru===0) status = 'Not started';
+      else if(diff===0) status = 'All square';
+      else if(diff>0) status = escapeHtml(p1.name)+' '+diff+' UP';
+      else status = escapeHtml(opp.name)+' '+(-diff)+' UP';
+
+      h += '<div class="card match-card">' +
+        '<div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:rgba(23,32,26,0.5);">'+escapeHtml(p1.name)+' vs '+escapeHtml(opp.name)+'</div>' +
+        '<div class="match-status">'+status+'</div>' +
+        '<div class="match-sub">Thru '+thru+' of 18</div>' +
+        '<div class="wlh">' +
+          '<span>Won<b>'+w+'</b></span>' +
+          '<span>Lost<b>'+l+'</b></span>' +
+          '<span>Halved<b>'+ha+'</b></span>' +
+        '</div>' +
+      '</div>';
+    }
+    return h;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  // ---------- EVENTS ----------
+  function bind(){
+    var el;
+
+    // setup
+    document.querySelectorAll('[data-opp]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var n = parseInt(btn.getAttribute('data-opp'), 10);
+        state.numOpponents = n;
+        while(state.players.length < n+1){
+          var idx = state.players.length;
+          state.players.push({id: idx, name: 'Opponent '+idx});
+        }
+        render();
+      });
+    });
+    document.querySelectorAll('[data-player]').forEach(function(inp){
+      inp.addEventListener('input', function(){
+        var pid = parseInt(inp.getAttribute('data-player'),10);
+        var p = state.players.filter(function(pp){return pp.id===pid;})[0];
+        if(p) p.name = inp.value;
+      });
+    });
+    el = document.getElementById('startRound');
+    if(el) el.addEventListener('click', function(){ state.view='play'; state.currentHole=1; render(); });
+
+    // play
+    document.querySelectorAll('[data-gohole]').forEach(function(d){
+      d.addEventListener('click', function(){
+        state.currentHole = parseInt(d.getAttribute('data-gohole'),10);
+        render();
+      });
+    });
+    document.querySelectorAll('[data-adj]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var pid = parseInt(btn.getAttribute('data-pid'),10);
+        var delta = parseInt(btn.getAttribute('data-adj'),10);
+        var hole = state.currentHole;
+        var cur = state.scores[hole][pid];
+        if(typeof cur !== 'number') cur = holeByNum(hole).par;
+        cur = Math.max(1, cur+delta);
+        state.scores[hole][pid] = cur;
+        render();
+      });
+    });
+    el = document.getElementById('prevHole');
+    if(el) el.addEventListener('click', function(){ if(state.currentHole>1){ state.currentHole--; render(); } });
+    el = document.getElementById('nextHole');
+    if(el) el.addEventListener('click', function(){ if(state.currentHole<18){ state.currentHole++; render(); } });
+    el = document.getElementById('viewCard');
+    if(el) el.addEventListener('click', function(){ state.view='card'; state.cardTab='scorecard'; render(); });
+    el = document.getElementById('toCard');
+    if(el) el.addEventListener('click', function(){ state.view='card'; state.cardTab='scorecard'; render(); });
+
+    // card
+    document.querySelectorAll('[data-tab]').forEach(function(t){
+      t.addEventListener('click', function(){ state.cardTab = t.getAttribute('data-tab'); render(); });
+    });
+    el = document.getElementById('backToPlay');
+    if(el) el.addEventListener('click', function(){ state.view='play'; render(); });
+    el = document.getElementById('resetRound');
+    if(el) el.addEventListener('click', function(){
+      if(confirm('Start a new round? This clears all scores.')){
+        HOLES.forEach(function(hh){ state.scores[hh.n] = {}; });
+        state.view='setup';
+        state.currentHole=1;
+        render();
+      }
+    });
+
+    // rules modal — button toggles: second click hides it
+    el = document.getElementById('toggleRules');
+    if(el) el.addEventListener('click', function(){ state.rulesOpen = !state.rulesOpen; render(); });
+    el = document.getElementById('closeRules');
+    if(el) el.addEventListener('click', function(){ state.rulesOpen = false; render(); });
+    el = document.getElementById('rulesBackdrop');
+    if(el) el.addEventListener('click', function(e){ if(e.target.id==='rulesBackdrop'){ state.rulesOpen = false; render(); } });
+  }
+
+  render();
+})();
 </script>
-
 </body>
 </html>
