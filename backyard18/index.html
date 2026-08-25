@@ -832,6 +832,22 @@
     if(el) el.addEventListener('click', function(e){ if(e.target.id==='rulesBackdrop'){ state.rulesOpen = false; render(); } });
   }
 
+  function hasActiveRound(){
+    if(state.view === 'setup') return false;
+    return HOLES.some(function(hh){
+      var row = state.scores[hh.n];
+      return row && Object.keys(row).some(function(pid){ return typeof row[pid] === 'number'; });
+    });
+  }
+
+  window.addEventListener('beforeunload', function(e){
+    if(hasActiveRound()){
+      e.preventDefault();
+      e.returnValue = 'Leaving now clears your current round. Are you sure?';
+      return e.returnValue;
+    }
+  });
+
   render();
 })();
 </script>
