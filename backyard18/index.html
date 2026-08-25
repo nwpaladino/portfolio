@@ -678,40 +678,45 @@
     return h;
   }
 
+  function computeMatch(p1, p2){
+    var w=0,l=0,ha=0,thru=0;
+    HOLES.forEach(function(hh){
+      var a = state.scores[hh.n][p1.id], b = state.scores[hh.n][p2.id];
+      if(typeof a==='number' && typeof b==='number'){
+        thru++;
+        if(a<b) w++; else if(b<a) l++; else ha++;
+      }
+    });
+    var diff = w-l, status;
+    if(thru===0) status = 'Not started';
+    else if(diff===0) status = 'All square';
+    else if(diff>0) status = escapeHtml(p1.name)+' '+diff+' UP';
+    else status = escapeHtml(p2.name)+' '+(-diff)+' UP';
+    return {w:w, l:l, ha:ha, thru:thru, status:status};
+  }
+
   function renderMatchPlay(activePlayers){
     var h = '';
     if(activePlayers.length < 2){
       h += '<div class="card"><div class="empty">Add at least one opponent on the setup screen to track match play.</div></div>';
       return h;
     }
-    var p1 = activePlayers[0];
-    for(var i=1;i<activePlayers.length;i++){
-      var opp = activePlayers[i];
-      var w=0,l=0,ha=0,thru=0;
-      HOLES.forEach(function(hh){
-        var a = state.scores[hh.n][p1.id], b = state.scores[hh.n][opp.id];
-        if(typeof a==='number' && typeof b==='number'){
-          thru++;
-          if(a<b) w++; else if(b<a) l++; else ha++;
-        }
-      });
-      var diff = w-l;
-      var status;
-      if(thru===0) status = 'Not started';
-      else if(diff===0) status = 'All square';
-      else if(diff>0) status = escapeHtml(p1.name)+' '+diff+' UP';
-      else status = escapeHtml(opp.name)+' '+(-diff)+' UP';
+    for(var i=0;i<activePlayers.length;i++){
+      for(var j=i+1;j<activePlayers.length;j++){
+        var p1 = activePlayers[i], opp = activePlayers[j];
+        var m = computeMatch(p1, opp);
 
-      h += '<div class="card match-card">' +
-        '<div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:rgba(23,32,26,0.5);">'+escapeHtml(p1.name)+' vs '+escapeHtml(opp.name)+'</div>' +
-        '<div class="match-status">'+status+'</div>' +
-        '<div class="match-sub">Thru '+thru+' of 18</div>' +
-        '<div class="wlh">' +
-          '<span>Won<b>'+w+'</b></span>' +
-          '<span>Lost<b>'+l+'</b></span>' +
-          '<span>Halved<b>'+ha+'</b></span>' +
-        '</div>' +
-      '</div>';
+        h += '<div class="card match-card">' +
+          '<div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:rgba(23,32,26,0.5);">'+escapeHtml(p1.name)+' vs '+escapeHtml(opp.name)+'</div>' +
+          '<div class="match-status">'+m.status+'</div>' +
+          '<div class="match-sub">Thru '+m.thru+' of 18</div>' +
+          '<div class="wlh">' +
+            '<span>Won<b>'+m.w+'</b></span>' +
+            '<span>Lost<b>'+m.l+'</b></span>' +
+            '<span>Halved<b>'+m.ha+'</b></span>' +
+          '</div>' +
+        '</div>';
+      }
     }
     return h;
   }
