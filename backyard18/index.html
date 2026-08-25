@@ -44,7 +44,7 @@
   }
   .brand{
     display:flex;
-    align-items:baseline;
+    align-items:center;
     justify-content:space-between;
     margin-bottom:16px;
     padding-bottom:12px;
@@ -271,6 +271,37 @@
     margin-top:26px; line-height:1.6;
   }
   .empty{color:rgba(23,32,26,0.4); font-size:13px; padding:6px 0;}
+
+  /* Rules modal */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,20,14,0.55);
+    display:flex; align-items:flex-end; justify-content:center;
+    z-index:50; padding:0;
+  }
+  .modal-sheet{
+    background:var(--cream); color:var(--ink);
+    width:100%; max-width:520px;
+    border-radius:18px 18px 0 0;
+    padding:18px 18px 26px;
+    box-shadow:var(--shadow);
+    max-height:80vh; overflow-y:auto;
+  }
+  .modal-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .rules-list{
+    margin:0; padding-left:18px; list-style:disc;
+  }
+  .rules-list li{
+    font-size:13px; line-height:1.55; margin-bottom:10px;
+    color:rgba(23,32,26,0.85);
+  }
+  .rules-list li:last-child{margin-bottom:0;}
+  @media (min-width:560px){
+    .modal-backdrop{align-items:center;}
+    .modal-sheet{border-radius:18px;}
+  }
 </style>
 </head>
 <body>
@@ -302,11 +333,21 @@
 
   var PLAYER_COLORS = ['#1d3557','#bc4749','#c9a227','#2a9d8f'];
 
+  var HOUSE_RULES = [
+    'Par 3 – Putting. Putt two balls from the tee. Count all putts to make both.',
+    'Par 4 – Chip & Putt. Lying 2, as if a GIR was missed. Chip and 1 putt = 4/par.',
+    'Par 5 – Putting. Putt three balls from the tee. Count all putts to make all three.',
+    'Hitting concrete = penalty.',
+    'Obstructed swing = free relief, same lie, no closer to the hole, close to the same angle.',
+    'Ball ends up in the wrong hole = free drop right next to that hole, in the direction of the target hole.'
+  ];
+
   var state = {
     view: 'setup',           // setup | play | card
     cardTab: 'scorecard',    // scorecard | match
     currentHole: 1,
     numOpponents: 1,
+    rulesOpen: false,
     players: [
       {id:0, name:'You'},
       {id:1, name:'Opponent 1'}
@@ -443,6 +484,7 @@
     if(state.view==='setup') html += renderSetup();
     else if(state.view==='play') html += renderPlay();
     else html += renderCard();
+    if(state.rulesOpen) html += renderRulesModal();
     app.innerHTML = html;
     bind();
   }
@@ -454,7 +496,24 @@
         '<svg class="flagmark" viewBox="0 0 24 24" fill="none"><line x1="5" y1="2" x2="5" y2="22" stroke="#f5f1e4" stroke-width="1.6"/><path d="M5 3 L19 6 L5 10 Z" fill="#bc4749"/></svg>' +
         'Backyard 18' +
       '</div>' +
-      '<div class="brand-sub">Chip &amp; Putt Scorecard</div>' +
+      '<div class="row" style="align-items:center; gap:10px;">' +
+        '<div class="brand-sub">Chip &amp; Putt Scorecard</div>' +
+        '<button class="btn btn-ghost" id="toggleRules" style="padding:6px 12px; font-size:11px;">House Rules</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderRulesModal(){
+    var items = HOUSE_RULES.map(function(r){ return '<li>'+escapeHtml(r)+'</li>'; }).join('');
+    return '' +
+    '<div class="modal-backdrop" id="rulesBackdrop">' +
+      '<div class="modal-sheet">' +
+        '<div class="modal-head">' +
+          '<h3 style="margin:0; font-size:17px;">House Rules</h3>' +
+          '<button class="btn btn-ghost" id="closeRules" style="padding:6px 10px;">Close</button>' +
+        '</div>' +
+        '<ul class="rules-list">'+items+'</ul>' +
+      '</div>' +
     '</div>';
   }
 
@@ -730,6 +789,14 @@
         render();
       }
     });
+
+    // rules modal — button toggles: second click hides it
+    el = document.getElementById('toggleRules');
+    if(el) el.addEventListener('click', function(){ state.rulesOpen = !state.rulesOpen; render(); });
+    el = document.getElementById('closeRules');
+    if(el) el.addEventListener('click', function(){ state.rulesOpen = false; render(); });
+    el = document.getElementById('rulesBackdrop');
+    if(el) el.addEventListener('click', function(e){ if(e.target.id==='rulesBackdrop'){ state.rulesOpen = false; render(); } });
   }
 
   render();
