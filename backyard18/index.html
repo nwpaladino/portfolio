@@ -297,6 +297,31 @@
   }
   .empty{color:rgba(23,32,26,0.4); font-size:13px; padding:6px 0;}
 
+  /* Round history */
+  .history-row{
+    display:flex; align-items:center; gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+  }
+  .history-row:last-child{border-bottom:none;}
+  .history-row:active{background:rgba(23,32,26,0.03);}
+  .history-row-main{flex:1; min-width:0;}
+  .history-names{
+    font-size:13.5px; font-weight:700; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .history-meta{
+    font-size:11px; color:rgba(23,32,26,0.55); margin-top:2px;
+  }
+  .history-delete{
+    flex:none; width:26px; height:26px; border-radius:8px;
+    border:1px solid var(--line); background:#fff;
+    color:rgba(23,32,26,0.5); font-size:15px; line-height:1;
+    cursor:pointer;
+  }
+  .history-delete:hover{color:var(--flag); border-color:var(--flag);}
+
   /* Rules modal */
   .modal-backdrop{
     position:fixed; inset:0; background:rgba(10,20,14,0.55);
@@ -370,11 +395,12 @@
   ];
 
   var state = {
-    view: 'setup',           // setup | play | card
+    view: 'setup',           // setup | play | card | history
     cardTab: 'scorecard',    // scorecard | match
     currentHole: 1,
     numOpponents: 1,
     rulesOpen: false,
+    historyViewId: null,
     players: [
       {id:0, name:'You'},
       {id:1, name:'Opponent 1'}
@@ -385,6 +411,50 @@
   HOLES.forEach(function(h){ state.scores[h.n] = {}; });
 
   function holeByNum(n){ return HOLES.filter(function(h){return h.n===n;})[0]; }
+
+  // ---------- ROUND HISTORY (persisted in localStorage) ----------
+  var HISTORY_KEY = 'backyard18_round_history_v1';
+  var HISTORY_LIMIT = 40;
+
+  function loadHistory(){
+    try{
+      var raw = localStorage.getItem(HISTORY_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function saveHistoryList(list){
+    try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); }catch(e){}
+  }
+
+  function archiveCurrentRound(){
+    if(!hasActiveRound()) return;
+    var activePlayers = state.players.slice(0, state.numOpponents+1);
+    var record = {
+      id: Date.now(),
+      timestamp: Date.now(),
+      players: activePlayers.map(function(p){ return {id:p.id, name:p.name}; }),
+      scores: JSON.parse(JSON.stringify(state.scores))
+    };
+    var list = loadHistory();
+    list.unshift(record);
+    if(list.length > HISTORY_LIMIT) list = list.slice(0, HISTORY_LIMIT);
+    saveHistoryList(list);
+  }
+
+  function deleteHistoryEntry(id){
+    var list = loadHistory().filter(function(r){ return r.id !== id; });
+    saveHistoryList(list);
+  }
+
+  function formatRoundTimestamp(ts){
+    var d = new Date(ts);
+    var datePart = d.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+    var timePart = d.toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'});
+    return datePart + ' · ' + timePart;
+  }
 
   function formatRule(par){
     if(par===3) return {label:'Putting · 2 balls', cls:'p3', rule:'Putt two balls from the tee. Score is total putts to hole out both balls (minimum 2).'};
@@ -510,6 +580,10 @@
     var html = brandHeader();
     if(state.view==='setup') html += renderSetup();
     else if(state.view==='play') html += renderPlay();
+    else if(state.view==='history'){
+      var rec = loadHistory().filter(function(r){ return r.id===state.historyViewId; })[0];
+      html += rec ? renderHistoryDetail(rec) : '<div class="card"><div class="empty">That round is no longer available.</div></div><button class="btn btn-ghost btn-block" id="historyBack">← Back to scorecards</button>';
+    }
     else html += renderCard();
     if(state.rulesOpen) html += renderRulesModal();
     app.innerHTML = html;
@@ -568,6 +642,68 @@
 
     h += '<button class="btn btn-primary btn-block" style="margin-top:16px;" id="startRound">Start round →</button>';
     h += '</div>';
+
+    h += renderHistoryList();
+    return h;
+  }
+
+  function renderHistoryList(){
+    var list = loadHistory();
+    var h = '<div class="card">';
+    h += '<h3 style="margin:0 0 10px; font-size:14px;">Past scorecards</h3>';
+    if(list.length === 0){
+      h += '<div class="empty">Finished rounds will show up here once you start a new round.</div>';
+      h += '</div>';
+      return h;
+    }
+    list.forEach(function(rec){
+      var names = rec.players.map(function(p){ return escapeHtml(p.name); }).join(' vs ');
+      var t = totalsFor(rec.players[0].id, HOLES, rec.scores);
+      var statusLine = t.played===18 ? (t.strokes - t.par===0?'Even par':(t.strokes-t.par>0?'+'+(t.strokes-t.par):(t.strokes-t.par)))+' · '+t.strokes+' strokes' : t.played+'/18 holes played';
+      h += '<div class="history-row" data-history-open="'+rec.id+'">' +
+        '<div class="history-row-main">' +
+          '<div class="history-names">'+names+'</div>' +
+          '<div class="history-meta">'+formatRoundTimestamp(rec.timestamp)+' · '+escapeHtml(statusLine)+'</div>' +
+        '</div>' +
+        '<button class="history-delete" data-history-delete="'+rec.id+'" aria-label="Delete round" title="Delete round">×</button>' +
+      '</div>';
+    });
+    h += '</div>';
+    return h;
+  }
+
+  function renderHistoryDetail(record){
+    var activePlayers = record.players;
+    var front = HOLES.slice(0,9), back = HOLES.slice(9,18);
+    var h = '<div class="card"><div class="section-scroll">';
+    h += scoreTable(front, 'OUT', activePlayers, record.scores);
+    h += '</div></div>';
+    h += '<div class="card"><div class="section-scroll">';
+    h += scoreTable(back, 'IN', activePlayers, record.scores);
+    h += '</div></div>';
+
+    h += '<div class="card">';
+    h += '<h3 style="margin:0 0 8px; font-size:14px;">Totals</h3>';
+    activePlayers.forEach(function(p, idx){
+      var t = totalsFor(p.id, HOLES, record.scores);
+      var toPar = t.strokes - t.par;
+      var toParStr = t.played===0 ? '—' : (toPar===0?'E':(toPar>0?'+'+toPar:toPar));
+      h += '<div class="totals-strip">' +
+        '<div class="pname"><span class="swatch" style="background:'+PLAYER_COLORS[idx]+'"></span>'+escapeHtml(p.name)+'</div>' +
+        '<div style="text-align:right;">' +
+          '<div style="font-size:16px; font-weight:700;">'+(t.played? t.strokes : '—')+'</div>' +
+          '<div class="toparlabel">'+(t.played? t.played+'/18 · '+toParStr : 'no scores')+'</div>' +
+        '</div>' +
+      '</div>';
+    });
+    h += '</div>';
+
+    if(activePlayers.length > 1) h += renderMatchPlay(activePlayers, record.scores);
+
+    h += '<div class="nav-buttons">';
+    h += '<button class="btn btn-ghost grow" id="historyBack">← Back to scorecards</button>';
+    h += '<button class="btn btn-flag grow" data-history-delete="'+record.id+'">Delete round</button>';
+    h += '</div>';
     return h;
   }
 
@@ -623,10 +759,11 @@
   }
 
   // ---------- SCORECARD / MATCH PLAY ----------
-  function totalsFor(playerId, holeList){
+  function totalsFor(playerId, holeList, scoresData){
+    scoresData = scoresData || state.scores;
     var strokes=0, par=0, played=0;
     holeList.forEach(function(hh){
-      var v = state.scores[hh.n][playerId];
+      var v = scoresData[hh.n] ? scoresData[hh.n][playerId] : undefined;
       if(typeof v === 'number'){ strokes+=v; par+=hh.par; played++; }
     });
     return {strokes:strokes, par:par, played:played};
@@ -675,7 +812,8 @@
     return h;
   }
 
-  function scoreTable(holeList, label, activePlayers){
+  function scoreTable(holeList, label, activePlayers, scoresData){
+    scoresData = scoresData || state.scores;
     var h = '<table class="scoretable"><thead><tr><th class="rowlabel">Hole</th>';
     holeList.forEach(function(hh){ h += '<th>'+hh.n+'</th>'; });
     h += '<th class="total">'+label+'</th></tr>';
@@ -688,7 +826,7 @@
       h += '<tr><td class="rowlabel"><span class="swatch" style="background:'+PLAYER_COLORS[idx]+'; display:inline-block; vertical-align:-1px;"></span> '+escapeHtml(p.name)+'</td>';
       var sum=0, any=false;
       holeList.forEach(function(hh){
-        var v = state.scores[hh.n][p.id];
+        var v = scoresData[hh.n] ? scoresData[hh.n][p.id] : undefined;
         if(typeof v==='number'){
           sum+=v; any=true;
           var diff = v - hh.par;
@@ -704,10 +842,12 @@
     return h;
   }
 
-  function computeMatch(p1, p2){
+  function computeMatch(p1, p2, scoresData){
+    scoresData = scoresData || state.scores;
     var w=0,l=0,ha=0,thru=0;
     HOLES.forEach(function(hh){
-      var a = state.scores[hh.n][p1.id], b = state.scores[hh.n][p2.id];
+      var a = scoresData[hh.n] ? scoresData[hh.n][p1.id] : undefined;
+      var b = scoresData[hh.n] ? scoresData[hh.n][p2.id] : undefined;
       if(typeof a==='number' && typeof b==='number'){
         thru++;
         if(a<b) w++; else if(b<a) l++; else ha++;
@@ -721,7 +861,7 @@
     return {w:w, l:l, ha:ha, thru:thru, status:status};
   }
 
-  function renderMatchPlay(activePlayers){
+  function renderMatchPlay(activePlayers, scoresData){
     var h = '';
     if(activePlayers.length < 2){
       h += '<div class="card"><div class="empty">Add at least one opponent on the setup screen to track match play.</div></div>';
@@ -730,7 +870,7 @@
     for(var i=0;i<activePlayers.length;i++){
       for(var j=i+1;j<activePlayers.length;j++){
         var p1 = activePlayers[i], opp = activePlayers[j];
-        var m = computeMatch(p1, opp);
+        var m = computeMatch(p1, opp, scoresData);
 
         h += '<div class="card match-card">' +
           '<div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:rgba(23,32,26,0.5);">'+escapeHtml(p1.name)+' vs '+escapeHtml(opp.name)+'</div>' +
@@ -816,6 +956,7 @@
     el = document.getElementById('resetRound');
     if(el) el.addEventListener('click', function(){
       if(confirm('Start a new round? This clears all scores.')){
+        archiveCurrentRound();
         HOLES.forEach(function(hh){ state.scores[hh.n] = {}; });
         state.view='setup';
         state.currentHole=1;
@@ -830,6 +971,29 @@
     if(el) el.addEventListener('click', function(){ state.rulesOpen = false; render(); });
     el = document.getElementById('rulesBackdrop');
     if(el) el.addEventListener('click', function(e){ if(e.target.id==='rulesBackdrop'){ state.rulesOpen = false; render(); } });
+
+    // round history
+    document.querySelectorAll('[data-history-open]').forEach(function(row){
+      row.addEventListener('click', function(){
+        state.historyViewId = parseInt(row.getAttribute('data-history-open'),10);
+        state.view = 'history';
+        render();
+      });
+    });
+    document.querySelectorAll('[data-history-delete]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var id = parseInt(btn.getAttribute('data-history-delete'),10);
+        if(confirm('Delete this saved round? This can\'t be undone.')){
+          deleteHistoryEntry(id);
+          state.view = 'setup';
+          state.historyViewId = null;
+          render();
+        }
+      });
+    });
+    el = document.getElementById('historyBack');
+    if(el) el.addEventListener('click', function(){ state.view='setup'; state.historyViewId=null; render(); });
   }
 
   function hasActiveRound(){
