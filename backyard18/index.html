@@ -317,7 +317,8 @@
     margin:4px 0 2px;
   }
   .match-sub{font-size:11px; color:rgba(23,32,26,0.55); margin-bottom:10px;}
-  .wlh{display:flex; gap:14px; font-size:12px;}
+  .wlh{display:flex; gap:10px; font-size:11px; flex-wrap:wrap;}
+  .wlh span{flex:1; min-width:60px;}
   .wlh span b{display:block; font-size:16px; font-family:'Fraunces',serif;}
 
   .footer-note{
@@ -878,7 +879,7 @@
   function hcFieldMarkup(p){
     var known = computePlayerHandicap((p.name||'').trim().toLowerCase());
     if(known !== null){
-      var shown = (known>0?'+':'')+known.toFixed(1);
+      var shown = (known>0?'+':'')+known.toFixed(2);
       return '<div class="hc-badge" title="Computed from saved rounds — can\'t be edited">HC '+shown+'</div>';
     }
     var val = (typeof p.manualHandicap === 'number') ? p.manualHandicap : 0;
@@ -1124,18 +1125,19 @@
     return {
       scratch: scratch, withHandicap: withHc,
       hc1: hc1, hc2: hc2, diff: diff,
-      receiverName: receiver ? receiver.name : null
+      receiverName: receiver ? receiver.name : null,
+      strokeHoleNums: Object.keys(strokeHoles).map(Number).sort(function(a,b){ return a-b; })
     };
   }
 
-  function outcomeBlock(label, res){
+  function outcomeBlock(label, res, p1Name, p2Name){
     return '<div class="outcome-block">' +
       '<div class="outcome-label">'+label+'</div>' +
       '<div class="match-status">'+res.status+'</div>' +
       '<div class="match-sub">Thru '+res.thru+' of 18</div>' +
       '<div class="wlh">' +
-        '<span>Won<b>'+res.w+'</b></span>' +
-        '<span>Lost<b>'+res.l+'</b></span>' +
+        '<span>'+escapeHtml(p1Name)+' won<b>'+res.w+'</b></span>' +
+        '<span>'+escapeHtml(p2Name)+' won<b>'+res.l+'</b></span>' +
         '<span>Halved<b>'+res.ha+'</b></span>' +
       '</div>' +
     '</div>';
@@ -1152,14 +1154,14 @@
         var p1 = activePlayers[i], opp = activePlayers[j];
         var m = computeMatch(p1, opp, scoresData);
         var hcLine = m.diff>0
-          ? escapeHtml(m.receiverName)+' gets '+m.diff+' stroke'+(m.diff===1?'':'s')
+          ? escapeHtml(m.receiverName)+' gets '+m.diff+' stroke'+(m.diff===1?'':'s')+' on holes #'+m.strokeHoleNums.join(', #')
           : 'Even handicaps, no strokes given';
 
         h += '<div class="card match-card">' +
           '<div class="match-title">'+escapeHtml(p1.name)+' vs '+escapeHtml(opp.name)+'</div>' +
-          '<div class="hc-line">HC '+m.hc1.toFixed(1)+' vs HC '+m.hc2.toFixed(1)+' · '+hcLine+'</div>' +
-          outcomeBlock('Scratch', m.scratch) +
-          outcomeBlock('With Handicap', m.withHandicap) +
+          '<div class="hc-line">HC '+m.hc1.toFixed(2)+' vs HC '+m.hc2.toFixed(2)+' (diff '+m.diff+') · '+hcLine+'</div>' +
+          outcomeBlock('Scratch', m.scratch, p1.name, opp.name) +
+          outcomeBlock('With Handicap', m.withHandicap, p1.name, opp.name) +
         '</div>';
       }
     }
