@@ -88,6 +88,8 @@
   .btn-primary:hover{filter:brightness(1.12);}
   .btn-ghost{background:transparent; color:var(--cream); border:1px solid rgba(245,241,228,0.35);}
   .btn-ghost:hover{background:rgba(245,241,228,0.08);}
+  .btn-ghost-dark{background:transparent; color:var(--ink); border:1px solid rgba(23,32,26,0.22);}
+  .btn-ghost-dark:hover{background:rgba(23,32,26,0.05);}
   .btn-flag{background:var(--flag); color:var(--cream);}
   .btn-block{width:100%; display:block; text-align:center;}
   .row{display:flex; gap:8px;}
@@ -398,12 +400,13 @@
   ];
 
   var state = {
-    view: 'setup',           // setup | play | card | history
+    view: 'setup',           // setup | play | card | history | stats
     cardTab: 'scorecard',    // scorecard | match
     currentHole: 1,
     numOpponents: 1,
     rulesOpen: false,
     historyViewId: null,
+    statsKey: null,
     players: [
       {id:0, name:''},
       {id:1, name:''}
@@ -587,6 +590,9 @@
       var rec = loadHistory().filter(function(r){ return r.id===state.historyViewId; })[0];
       html += rec ? renderHistoryDetail(rec) : '<div class="card"><div class="empty">That round is no longer available.</div></div><button class="btn btn-ghost btn-block" id="historyBack">← Back to scorecards</button>';
     }
+    else if(state.view==='stats'){
+      html += state.statsKey ? renderPlayerStatsDetail(state.statsKey) : renderStatsList();
+    }
     else html += renderCard();
     if(state.rulesOpen) html += renderRulesModal();
     app.innerHTML = html;
@@ -614,7 +620,7 @@
       '<div class="modal-sheet">' +
         '<div class="modal-head">' +
           '<h3 style="margin:0; font-size:17px;">House Rules</h3>' +
-          '<button class="btn btn-ghost" id="closeRules" style="padding:6px 10px;">Close</button>' +
+          '<button class="btn btn-ghost-dark" id="closeRules" style="padding:6px 10px;">Close</button>' +
         '</div>' +
         '<ul class="rules-list">'+items+'</ul>' +
       '</div>' +
@@ -644,6 +650,7 @@
     h += '</div>';
 
     h += '<button class="btn btn-primary btn-block" style="margin-top:16px;" id="startRound">Start round →</button>';
+    h += '<button class="btn btn-ghost-dark btn-block" style="margin-top:8px;" id="openStats">View player stats</button>';
     h += '</div>';
 
     h += renderHistoryList();
@@ -710,6 +717,112 @@
     return h;
   }
 
+  // ---------- PLAYER STATS (aggregated across saved history, grouped by name) ----------
+  function uniquePlayerNames(){
+    var map = {};
+    loadHistory().forEach(function(rec){
+      rec.players.forEach(function(p){
+        var name = (p.name || '').trim();
+        var key = name.toLowerCase();
+        if(key && !map[key]) map[key] = name; // newest round first, so first hit wins the display casing
+      });
+    });
+    return Object.keys(map).map(function(k){ return {key:k, name:map[k]}; })
+      .sort(function(a,b){ return a.name.localeCompare(b.name); });
+  }
+
+  function computePlayerStats(key){
+    var parSums = {3:{sum:0,count:0}, 4:{sum:0,count:0}, 5:{sum:0,count:0}};
+    var birdies=0, eagles=0, aces=0;
+    var roundTotals = [];
+    loadHistory().forEach(function(rec){
+      rec.players.forEach(function(p){
+        if(!p.name || p.name.trim().toLowerCase() !== key) return;
+        var strokes=0, played=0;
+        HOLES.forEach(function(hh){
+          var v = rec.scores[hh.n] ? rec.scores[hh.n][p.id] : undefined;
+          if(typeof v !== 'number') return;
+          played++;
+          strokes += v;
+          parSums[hh.par].sum += v;
+          parSums[hh.par].count++;
+          var diff = v - hh.par;
+          if(v===1) aces++;
+          else if(diff<=-2) eagles++;
+          else if(diff===-1) birdies++;
+        });
+        if(played===18) roundTotals.push({strokes:strokes, timestamp:rec.timestamp});
+      });
+    });
+    var best = roundTotals.length ? roundTotals.reduce(function(a,b){ return b.strokes<a.strokes ? b : a; }) : null;
+    var avg = roundTotals.length ? roundTotals.reduce(function(s,r){ return s+r.strokes; },0)/roundTotals.length : null;
+    function parAvg(p){ return parSums[p].count ? parSums[p].sum/parSums[p].count : null; }
+    return {
+      roundsPlayed: roundTotals.length,
+      best: best, average: avg,
+      par3avg: parAvg(3), par4avg: parAvg(4), par5avg: parAvg(5),
+      birdies: birdies, eagles: eagles, aces: aces
+    };
+  }
+
+  function statRow(label, value){
+    return '<div class="totals-strip"><div class="pname">'+escapeHtml(label)+'</div><div style="font-weight:700;">'+value+'</div></div>';
+  }
+
+  function renderStatsList(){
+    var names = uniquePlayerNames();
+    var h = '<div class="card">';
+    h += '<h2 style="margin:0 0 4px; font-size:19px;">Player Stats</h2>';
+    h += '<p style="font-size:12.5px; color:rgba(23,32,26,0.6); margin:0 0 4px;">Pulled from every saved round. Players with the same name are combined.</p>';
+    h += '</div>';
+    h += '<div class="card">';
+    if(names.length===0){
+      h += '<div class="empty">Finish and save a round to start tracking stats.</div>';
+    } else {
+      names.forEach(function(nm){
+        h += '<div class="history-row" data-stats-open="'+escapeHtml(nm.key)+'">' +
+          '<div class="history-row-main"><div class="history-names">'+escapeHtml(nm.name)+'</div></div>' +
+          '<div style="color:rgba(23,32,26,0.35); font-size:16px;">›</div>' +
+        '</div>';
+      });
+    }
+    h += '</div>';
+    h += '<button class="btn btn-ghost btn-block" id="statsListBack">← Back to setup</button>';
+    return h;
+  }
+
+  function renderPlayerStatsDetail(key){
+    var match = uniquePlayerNames().filter(function(n){ return n.key===key; })[0];
+    var displayName = match ? match.name : key;
+    var s = computePlayerStats(key);
+
+    var h = '<div class="card">';
+    h += '<h2 style="margin:0 0 4px; font-size:19px;">'+escapeHtml(displayName)+'</h2>';
+    h += '<p style="font-size:12px; color:rgba(23,32,26,0.55); margin:0;">'+s.roundsPlayed+' completed round'+(s.roundsPlayed===1?'':'s')+' on record.</p>';
+    h += '</div>';
+
+    h += '<div class="card">';
+    h += '<h3 style="margin:0 0 8px; font-size:14px;">Round performance</h3>';
+    h += statRow('Best round', s.best ? s.best.strokes+' strokes · '+formatRoundTimestamp(s.best.timestamp) : '—');
+    h += statRow('Average round', s.average!==null ? s.average.toFixed(1)+' strokes' : '—');
+    h += statRow('Par 3 average', s.par3avg!==null ? s.par3avg.toFixed(2) : '—');
+    h += statRow('Par 4 average', s.par4avg!==null ? s.par4avg.toFixed(2) : '—');
+    h += statRow('Par 5 average', s.par5avg!==null ? s.par5avg.toFixed(2) : '—');
+    h += '</div>';
+
+    h += '<div class="card">';
+    h += '<h3 style="margin:0 0 10px; font-size:14px;">Highlights</h3>';
+    h += '<div class="wlh" style="gap:22px;">' +
+      '<span>Birdies<b>'+s.birdies+'</b></span>' +
+      '<span>Eagles<b>'+s.eagles+'</b></span>' +
+      '<span>Aces<b>'+s.aces+'</b></span>' +
+    '</div>';
+    h += '</div>';
+
+    h += '<button class="btn btn-ghost btn-block" id="statsBack">← Back to player list</button>';
+    return h;
+  }
+
   // ---------- PLAY ----------
   function renderPlay(){
     var hole = holeByNum(state.currentHole);
@@ -748,7 +861,7 @@
     });
 
     h += '<div class="nav-buttons">';
-    h += '<button class="btn btn-ghost grow" id="prevHole" '+(state.currentHole===1?'disabled style="opacity:.4"':'')+'>← Prev</button>';
+    h += '<button class="btn btn-ghost-dark grow" id="prevHole" '+(state.currentHole===1?'disabled style="opacity:.4"':'')+'>← Prev</button>';
     if(state.currentHole===18){
       h += '<button class="btn btn-flag grow" id="viewCard">Scorecard →</button>';
     } else {
@@ -997,6 +1110,20 @@
     });
     el = document.getElementById('historyBack');
     if(el) el.addEventListener('click', function(){ state.view='setup'; state.historyViewId=null; render(); });
+
+    // player stats
+    el = document.getElementById('openStats');
+    if(el) el.addEventListener('click', function(){ state.view='stats'; state.statsKey=null; render(); });
+    document.querySelectorAll('[data-stats-open]').forEach(function(row){
+      row.addEventListener('click', function(){
+        state.statsKey = row.getAttribute('data-stats-open');
+        render();
+      });
+    });
+    el = document.getElementById('statsBack');
+    if(el) el.addEventListener('click', function(){ state.statsKey = null; render(); });
+    el = document.getElementById('statsListBack');
+    if(el) el.addEventListener('click', function(){ state.view = 'setup'; state.statsKey = null; render(); });
   }
 
   function hasActiveRound(){
