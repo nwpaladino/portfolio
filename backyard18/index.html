@@ -123,6 +123,18 @@
     padding:9px 0;
     border-bottom:1px solid var(--line);
   }
+  .player-row input[type=text]{flex:1; min-width:0;}
+  .hc-field{flex:none; width:70px;}
+  .hc-badge{
+    font-size:11px; font-weight:700; text-align:center;
+    padding:8px 4px; border-radius:9px;
+    background:rgba(29,53,87,0.12); color:var(--navy);
+    white-space:nowrap;
+  }
+  .hc-input{
+    width:100%; font-family:'IBM Plex Mono', monospace; font-size:13px; text-align:center;
+    padding:8px 4px; border-radius:9px; border:1px solid var(--line); background:#fff; color:var(--ink);
+  }
   .player-row:last-child{border-bottom:none;}
   .swatch{width:14px;height:14px;border-radius:50%; flex:none;}
   .opp-toggle{
@@ -285,6 +297,21 @@
 
   /* Match play */
   .match-card{margin-bottom:10px;}
+  .match-title{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.08em;
+    color:rgba(23,32,26,0.5); font-weight:600;
+  }
+  .hc-line{
+    font-size:11.5px; color:rgba(23,32,26,0.6); margin:4px 0 2px;
+  }
+  .outcome-block{
+    padding-top:10px; margin-top:10px; border-top:1px dashed var(--line);
+  }
+  .outcome-block:first-of-type{border-top:none;}
+  .outcome-label{
+    font-size:10px; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;
+    color:var(--navy); margin-bottom:2px;
+  }
   .match-status{
     font-family:'Fraunces', serif; font-weight:700; font-size:20px;
     margin:4px 0 2px;
@@ -384,12 +411,13 @@
   ];
 
   var PLAYER_COLORS = ['#1d3557','#bc4749','#c9a227','#2a9d8f'];
+  var TOTAL_PAR = HOLES.reduce(function(s,h){ return s+h.par; }, 0);
 
   var HOUSE_RULES = [
     'Par 3 – Putting. Putt two balls from the tee. Count all putts to make both.',   
-      'If a player birdies a par 3, they may chip from the back of the fairway into the same hole. Making that chip counts as a hole-in-one! Missing that chip retains the birdie.',
+      'If a player birdies a par 3, they may chip from the back of the fairway into the same hole. Making that chip counts as a hole-in-one!',
     'Par 4 – Chip & Putt. Lying 2, as if a GIR was missed. Chip and 1 putt = 4/par.',
-      'If a player birdies a par 4, they may chip again into the same hole. Making that chip counts as an eagle! Missing that chip retains the birdie.',
+      'If a player birdies a par 4, they may chip again into the same hole. Making that chip counts as an eagle!',
     'Par 5 – Putting. Putt three balls from the tee. Count all putts to make all three.',
     'Hitting concrete = +1 Penalty. Hit from where it ends up.',
     'Obstructed swing = free relief, same lie, not significantly closer to the hole (a little is okay), close to the same angle if possible.',
@@ -408,8 +436,8 @@
     historyViewId: null,
     statsKey: null,
     players: [
-      {id:0, name:''},
-      {id:1, name:''}
+      {id:0, name:'', manualHandicap:0},
+      {id:1, name:'', manualHandicap:0}
     ],
     scores: {}  // scores[holeNum][playerId] = number|null
   };
@@ -435,18 +463,72 @@
     try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); }catch(e){}
   }
 
+  function median(nums){
+    if(!nums.length) return null;
+    var s = nums.slice().sort(function(a,b){ return a-b; });
+    var mid = Math.floor(s.length/2);
+    return s.length % 2 ? s[mid] : (s[mid-1]+s[mid])/2;
+  }
+
+  // Total strokes for a player within one archived record, only counting
+  // rounds where all 18 holes were scored (a fair "complete round").
+  function completedRoundStrokes(rec, playerId){
+    var strokes=0, played=0;
+    HOLES.forEach(function(hh){
+      var v = rec.scores[hh.n] ? rec.scores[hh.n][playerId] : undefined;
+      if(typeof v === 'number'){ played++; strokes += v; }
+    });
+    return played===18 ? strokes : null;
+  }
+
+  // Round ids that hold a "best round" (lowest completed strokes) for any
+  // player name — these are never evicted when trimming to HISTORY_LIMIT.
+  function bestRoundIds(list){
+    var bestByName = {};
+    list.forEach(function(rec){
+      rec.players.forEach(function(p){
+        var key = (p.name||'').trim().toLowerCase();
+        if(!key) return;
+        var strokes = completedRoundStrokes(rec, p.id);
+        if(strokes===null) return;
+        if(!bestByName[key] || strokes < bestByName[key].strokes){
+          bestByName[key] = {id: rec.id, strokes: strokes};
+        }
+      });
+    });
+    var ids = {};
+    Object.keys(bestByName).forEach(function(k){ ids[bestByName[k].id] = true; });
+    return ids;
+  }
+
+  // Trim to HISTORY_LIMIT, evicting oldest rounds first, but skipping any
+  // round that is currently someone's best round.
+  function trimHistoryPreservingBests(list){
+    if(list.length <= HISTORY_LIMIT) return list;
+    var protectedIds = bestRoundIds(list);
+    var result = list.slice(); // newest-first order
+    var i = result.length - 1;
+    while(result.length > HISTORY_LIMIT && i >= 0){
+      if(!protectedIds[result[i].id]) result.splice(i, 1);
+      i--;
+    }
+    return result; // may still exceed the limit if too many rounds are protected bests
+  }
+
   function archiveCurrentRound(){
     if(!hasActiveRound()) return;
     var activePlayers = state.players.slice(0, state.numOpponents+1);
     var record = {
       id: Date.now(),
       timestamp: Date.now(),
-      players: activePlayers.map(function(p){ return {id:p.id, name:p.name}; }),
+      players: activePlayers.map(function(p){
+        return {id:p.id, name:p.name, handicap: playerHandicapValue(p)};
+      }),
       scores: JSON.parse(JSON.stringify(state.scores))
     };
     var list = loadHistory();
     list.unshift(record);
-    if(list.length > HISTORY_LIMIT) list = list.slice(0, HISTORY_LIMIT);
+    list = trimHistoryPreservingBests(list);
     saveHistoryList(list);
   }
 
@@ -644,10 +726,12 @@
     state.players.slice(0, state.numOpponents+1).forEach(function(p, idx){
       h += '<div class="player-row">' +
         '<span class="swatch" style="background:'+PLAYER_COLORS[idx]+'"></span>' +
-        '<input type="text" data-player="'+p.id+'" value="'+escapeHtml(p.name)+'" placeholder="Player name">' +
+        '<input type="text" class="grow" data-player="'+p.id+'" value="'+escapeHtml(p.name)+'" placeholder="Player name">' +
+        '<div class="hc-field" id="hcField-'+p.id+'">'+hcFieldMarkup(p)+'</div>' +
       '</div>';
     });
     h += '</div>';
+    h += '<p style="font-size:10.5px; color:rgba(23,32,26,0.45); margin:8px 0 0;">Handicap is auto-calculated from saved rounds once a name has a completed round. New names can be entered manually.</p>';
 
     h += '<button class="btn btn-primary btn-block" style="margin-top:16px;" id="startRound">Start round →</button>';
     h += '<button class="btn btn-ghost-dark btn-block" style="margin-top:8px;" id="openStats">View player stats</button>';
@@ -756,13 +840,49 @@
     });
     var best = roundTotals.length ? roundTotals.reduce(function(a,b){ return b.strokes<a.strokes ? b : a; }) : null;
     var avg = roundTotals.length ? roundTotals.reduce(function(s,r){ return s+r.strokes; },0)/roundTotals.length : null;
+    var overPars = roundTotals.map(function(r){ return r.strokes - TOTAL_PAR; });
+    var handicap = overPars.length ? median(overPars) : null;
     function parAvg(p){ return parSums[p].count ? parSums[p].sum/parSums[p].count : null; }
     return {
       roundsPlayed: roundTotals.length,
-      best: best, average: avg,
+      best: best, average: avg, handicap: handicap,
       par3avg: parAvg(3), par4avg: parAvg(4), par5avg: parAvg(5),
       birdies: birdies, eagles: eagles, aces: aces
     };
+  }
+
+  // Handicap = median "strokes over par" from a player's completed rounds.
+  // Returns null when there isn't a completed round on record under that
+  // name yet — the UI treats that as "new" and allows manual entry.
+  function computePlayerHandicap(key){
+    if(!key) return null;
+    return computePlayerStats(key).handicap;
+  }
+
+  function isKnownPlayerName(name){
+    return computePlayerHandicap((name||'').trim().toLowerCase()) !== null;
+  }
+
+  // Resolves the handicap actually used for a player: a stored snapshot
+  // (on archived records) takes priority, then real history, then their
+  // manually entered value for a brand-new name, defaulting to 0.
+  function playerHandicapValue(player){
+    if(player && typeof player.handicap === 'number') return player.handicap;
+    var known = computePlayerHandicap((player && player.name || '').trim().toLowerCase());
+    if(known !== null) return known;
+    return (player && typeof player.manualHandicap === 'number') ? player.manualHandicap : 0;
+  }
+
+  // Known name (has a completed round on record) → read-only computed
+  // badge. New/unrecognized name → editable manual handicap input.
+  function hcFieldMarkup(p){
+    var known = computePlayerHandicap((p.name||'').trim().toLowerCase());
+    if(known !== null){
+      var shown = (known>0?'+':'')+known.toFixed(1);
+      return '<div class="hc-badge" title="Computed from saved rounds — can\'t be edited">HC '+shown+'</div>';
+    }
+    var val = (typeof p.manualHandicap === 'number') ? p.manualHandicap : 0;
+    return '<input type="number" class="hc-input" data-hc="'+p.id+'" min="0" max="36" step="1" value="'+val+'" placeholder="HC">';
   }
 
   function statRow(label, value){
@@ -803,6 +923,7 @@
 
     h += '<div class="card">';
     h += '<h3 style="margin:0 0 8px; font-size:14px;">Round performance</h3>';
+    h += statRow('Handicap', s.handicap!==null ? (s.handicap>0?'+':'')+s.handicap.toFixed(1)+' median over par' : '— (needs a completed round)');
     h += statRow('Best round', s.best ? s.best.strokes+' strokes · '+formatRoundTimestamp(s.best.timestamp) : '—');
     h += statRow('Average round', s.average!==null ? s.average.toFixed(1)+' strokes' : '—');
     h += statRow('Par 3 average', s.par3avg!==null ? s.par3avg.toFixed(2) : '—');
@@ -958,23 +1079,66 @@
     return h;
   }
 
+  // Golf-style handicap application: the higher-handicap player gets a
+  // stroke on their hardest holes first (lowest hole.hc = hardest), one
+  // hole per whole stroke of difference between the two players.
   function computeMatch(p1, p2, scoresData){
     scoresData = scoresData || state.scores;
-    var w=0,l=0,ha=0,thru=0;
+    var hc1 = playerHandicapValue(p1), hc2 = playerHandicapValue(p2);
+    var rawDiff = hc1 - hc2;
+    var diff = Math.round(Math.abs(rawDiff));
+    var receiver = rawDiff>0 ? p1 : (rawDiff<0 ? p2 : null);
+    var strokeHoles = {};
+    if(receiver && diff>0){
+      var byToughness = HOLES.slice().sort(function(a,b){ return a.hc-b.hc; });
+      for(var k=0;k<Math.min(diff,18);k++){ strokeHoles[byToughness[k].n] = true; }
+    }
+
+    function freshTally(){ return {w:0,l:0,ha:0,thru:0}; }
+    var scratch = freshTally(), withHc = freshTally();
+
     HOLES.forEach(function(hh){
       var a = scoresData[hh.n] ? scoresData[hh.n][p1.id] : undefined;
       var b = scoresData[hh.n] ? scoresData[hh.n][p2.id] : undefined;
-      if(typeof a==='number' && typeof b==='number'){
-        thru++;
-        if(a<b) w++; else if(b<a) l++; else ha++;
-      }
+      if(typeof a!=='number' || typeof b!=='number') return;
+
+      scratch.thru++;
+      if(a<b) scratch.w++; else if(b<a) scratch.l++; else scratch.ha++;
+
+      var aAdj = a - (receiver===p1 && strokeHoles[hh.n] ? 1 : 0);
+      var bAdj = b - (receiver===p2 && strokeHoles[hh.n] ? 1 : 0);
+      withHc.thru++;
+      if(aAdj<bAdj) withHc.w++; else if(bAdj<aAdj) withHc.l++; else withHc.ha++;
     });
-    var diff = w-l, status;
-    if(thru===0) status = 'Not started';
-    else if(diff===0) status = 'All square';
-    else if(diff>0) status = escapeHtml(p1.name)+' '+diff+' UP';
-    else status = escapeHtml(p2.name)+' '+(-diff)+' UP';
-    return {w:w, l:l, ha:ha, thru:thru, status:status};
+
+    function statusFor(res){
+      var d = res.w - res.l;
+      if(res.thru===0) return 'Not started';
+      if(d===0) return 'All square';
+      if(d>0) return escapeHtml(p1.name)+' '+d+' UP';
+      return escapeHtml(p2.name)+' '+(-d)+' UP';
+    }
+    scratch.status = statusFor(scratch);
+    withHc.status = statusFor(withHc);
+
+    return {
+      scratch: scratch, withHandicap: withHc,
+      hc1: hc1, hc2: hc2, diff: diff,
+      receiverName: receiver ? receiver.name : null
+    };
+  }
+
+  function outcomeBlock(label, res){
+    return '<div class="outcome-block">' +
+      '<div class="outcome-label">'+label+'</div>' +
+      '<div class="match-status">'+res.status+'</div>' +
+      '<div class="match-sub">Thru '+res.thru+' of 18</div>' +
+      '<div class="wlh">' +
+        '<span>Won<b>'+res.w+'</b></span>' +
+        '<span>Lost<b>'+res.l+'</b></span>' +
+        '<span>Halved<b>'+res.ha+'</b></span>' +
+      '</div>' +
+    '</div>';
   }
 
   function renderMatchPlay(activePlayers, scoresData){
@@ -987,16 +1151,15 @@
       for(var j=i+1;j<activePlayers.length;j++){
         var p1 = activePlayers[i], opp = activePlayers[j];
         var m = computeMatch(p1, opp, scoresData);
+        var hcLine = m.diff>0
+          ? escapeHtml(m.receiverName)+' gets '+m.diff+' stroke'+(m.diff===1?'':'s')
+          : 'Even handicaps, no strokes given';
 
         h += '<div class="card match-card">' +
-          '<div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:rgba(23,32,26,0.5);">'+escapeHtml(p1.name)+' vs '+escapeHtml(opp.name)+'</div>' +
-          '<div class="match-status">'+m.status+'</div>' +
-          '<div class="match-sub">Thru '+m.thru+' of 18</div>' +
-          '<div class="wlh">' +
-            '<span>Won<b>'+m.w+'</b></span>' +
-            '<span>Lost<b>'+m.l+'</b></span>' +
-            '<span>Halved<b>'+m.ha+'</b></span>' +
-          '</div>' +
+          '<div class="match-title">'+escapeHtml(p1.name)+' vs '+escapeHtml(opp.name)+'</div>' +
+          '<div class="hc-line">HC '+m.hc1.toFixed(1)+' vs HC '+m.hc2.toFixed(1)+' · '+hcLine+'</div>' +
+          outcomeBlock('Scratch', m.scratch) +
+          outcomeBlock('With Handicap', m.withHandicap) +
         '</div>';
       }
     }
@@ -1010,6 +1173,29 @@
   }
 
   // ---------- EVENTS ----------
+  function bindHcInput(inputEl){
+    inputEl.addEventListener('input', function(){
+      var pid = parseInt(inputEl.getAttribute('data-hc'),10);
+      var p = state.players.filter(function(pp){return pp.id===pid;})[0];
+      if(p){
+        var n = parseInt(inputEl.value,10);
+        p.manualHandicap = isNaN(n) ? 0 : Math.max(0, Math.min(36, n));
+      }
+    });
+  }
+
+  // Swaps the handicap field between the computed badge and the manual
+  // input as the player's name changes, without re-rendering the whole
+  // page (which would drop focus out of the name field mid-keystroke).
+  function refreshHcField(pid){
+    var p = state.players.filter(function(pp){return pp.id===pid;})[0];
+    var el = document.getElementById('hcField-'+pid);
+    if(!p || !el) return;
+    el.innerHTML = hcFieldMarkup(p);
+    var newInput = el.querySelector('[data-hc]');
+    if(newInput) bindHcInput(newInput);
+  }
+
   function bind(){
     var el;
 
@@ -1020,7 +1206,7 @@
         state.numOpponents = n;
         while(state.players.length < n+1){
           var idx = state.players.length;
-          state.players.push({id: idx, name: 'Opponent '+idx});
+          state.players.push({id: idx, name: 'Opponent '+idx, manualHandicap:0});
         }
         render();
       });
@@ -1029,9 +1215,10 @@
       inp.addEventListener('input', function(){
         var pid = parseInt(inp.getAttribute('data-player'),10);
         var p = state.players.filter(function(pp){return pp.id===pid;})[0];
-        if(p) p.name = inp.value;
+        if(p){ p.name = inp.value; refreshHcField(pid); }
       });
     });
+    document.querySelectorAll('[data-hc]').forEach(bindHcInput);
     el = document.getElementById('startRound');
     if(el) el.addEventListener('click', function(){ state.view='play'; state.currentHole=1; render(); });
 
