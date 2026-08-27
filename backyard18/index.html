@@ -816,9 +816,19 @@
       .sort(function(a,b){ return a.name.localeCompare(b.name); });
   }
 
+  function classifyTimeOfDay(ts){
+    var h = new Date(ts).getHours();
+    if(h>=5 && h<12) return 'morning';
+    if(h>=12 && h<17) return 'afternoon';
+    if(h>=17 && h<21) return 'evening';
+    return 'night';
+  }
+
   function computePlayerStats(key){
     var parSums = {3:{sum:0,count:0}, 4:{sum:0,count:0}, 5:{sum:0,count:0}};
-    var birdies=0, eagles=0, aces=0;
+    var perHoleSums = {};
+    HOLES.forEach(function(hh){ perHoleSums[hh.n] = {sum:0, count:0}; });
+    var birdies=0, eagles=0, aces=0, pars=0, bogeys=0;
     var roundTotals = [];
     loadHistory().forEach(function(rec){
       rec.players.forEach(function(p){
@@ -831,10 +841,14 @@
           strokes += v;
           parSums[hh.par].sum += v;
           parSums[hh.par].count++;
+          perHoleSums[hh.n].sum += v;
+          perHoleSums[hh.n].count++;
           var diff = v - hh.par;
           if(v===1) aces++;
           else if(diff<=-2) eagles++;
           else if(diff===-1) birdies++;
+          else if(diff===0) pars++;
+          else if(diff===1) bogeys++;
         });
         if(played===18) roundTotals.push({strokes:strokes, timestamp:rec.timestamp});
       });
@@ -844,11 +858,32 @@
     var overPars = roundTotals.map(function(r){ return r.strokes - TOTAL_PAR; });
     var handicap = overPars.length ? median(overPars) : null;
     function parAvg(p){ return parSums[p].count ? parSums[p].sum/parSums[p].count : null; }
+
+    var perHole = {};
+    HOLES.forEach(function(hh){
+      var s = perHoleSums[hh.n];
+      perHole[hh.n] = s.count ? {avg: s.sum/s.count, avgToPar: (s.sum/s.count)-hh.par, count:s.count} : null;
+    });
+
+    var timeBuckets = {morning:{sum:0,count:0}, afternoon:{sum:0,count:0}, evening:{sum:0,count:0}, night:{sum:0,count:0}};
+    roundTotals.forEach(function(r){
+      var b = classifyTimeOfDay(r.timestamp);
+      timeBuckets[b].sum += r.strokes;
+      timeBuckets[b].count++;
+    });
+    var timeAverages = {};
+    Object.keys(timeBuckets).forEach(function(b){
+      timeAverages[b] = timeBuckets[b].count ? {avg: timeBuckets[b].sum/timeBuckets[b].count, count: timeBuckets[b].count} : null;
+    });
+
     return {
       roundsPlayed: roundTotals.length,
       best: best, average: avg, handicap: handicap,
       par3avg: parAvg(3), par4avg: parAvg(4), par5avg: parAvg(5),
-      birdies: birdies, eagles: eagles, aces: aces
+      birdies: birdies, eagles: eagles, aces: aces,
+      pars: pars, bogeys: bogeys,
+      perHole: perHole,
+      timeAverages: timeAverages
     };
   }
 
@@ -912,6 +947,38 @@
     return h;
   }
 
+  // Compact score-to-par table for one nine, built from averages rather
+  // than a single round's raw scores.
+  function perHoleAvgTable(holeList, label, perHole){
+    var h = '<table class="scoretable"><thead><tr><th class="rowlabel">Hole</th>';
+    holeList.forEach(function(hh){ h += '<th>'+hh.n+'</th>'; });
+    h += '<th class="total">'+label+'</th></tr>';
+    h += '<tr class="par-row"><th class="rowlabel">Par</th>';
+    holeList.forEach(function(hh){ h += '<th>'+hh.par+'</th>'; });
+    h += '<th class="total">—</th></tr></thead><tbody>';
+
+    h += '<tr><td class="rowlabel">Avg</td>';
+    holeList.forEach(function(hh){
+      var ph = perHole[hh.n];
+      h += '<td class="scorecell">'+(ph ? ph.avg.toFixed(1) : '–')+'</td>';
+    });
+    h += '<td class="total">–</td></tr>';
+
+    h += '<tr><td class="rowlabel">To Par</td>';
+    holeList.forEach(function(hh){
+      var ph = perHole[hh.n];
+      if(!ph){ h += '<td class="scorecell">–</td>'; return; }
+      var d = ph.avgToPar;
+      var txt = (d===0?'E':(d>0?'+':''))+d.toFixed(1);
+      var color = d===0 ? 'inherit' : (d<0 ? 'var(--flag)' : 'var(--navy)');
+      h += '<td class="scorecell" style="color:'+color+';">'+txt+'</td>';
+    });
+    h += '<td class="total">–</td></tr>';
+
+    h += '</tbody></table>';
+    return h;
+  }
+
   function renderPlayerStatsDetail(key){
     var match = uniquePlayerNames().filter(function(n){ return n.key===key; })[0];
     var displayName = match ? match.name : key;
@@ -930,6 +997,8 @@
     h += statRow('Par 3 average', s.par3avg!==null ? s.par3avg.toFixed(2) : '—');
     h += statRow('Par 4 average', s.par4avg!==null ? s.par4avg.toFixed(2) : '—');
     h += statRow('Par 5 average', s.par5avg!==null ? s.par5avg.toFixed(2) : '—');
+    var ratioStr = s.bogeys>0 ? (s.pars/s.bogeys).toFixed(2) : (s.pars>0 ? '∞' : '—');
+    h += statRow('Par : Bogey ratio', s.pars+' pars : '+s.bogeys+' bogeys ('+ratioStr+')');
     h += '</div>';
 
     h += '<div class="card">';
@@ -939,6 +1008,23 @@
       '<span>Eagles<b>'+s.eagles+'</b></span>' +
       '<span>Aces<b>'+s.aces+'</b></span>' +
     '</div>';
+    h += '</div>';
+
+    h += '<div class="card"><h3 style="margin:0 0 8px; font-size:14px;">Per-hole score to par</h3><div class="section-scroll">';
+    h += perHoleAvgTable(HOLES.slice(0,9), 'OUT', s.perHole);
+    h += '</div></div>';
+    h += '<div class="card"><div class="section-scroll">';
+    h += perHoleAvgTable(HOLES.slice(9,18), 'IN', s.perHole);
+    h += '</div></div>';
+
+    h += '<div class="card">';
+    h += '<h3 style="margin:0 0 8px; font-size:14px;">Time of day averages</h3>';
+    h += '<p style="font-size:11px; color:rgba(23,32,26,0.5); margin:0 0 8px;">Average strokes per completed round, grouped by when the round was saved.</p>';
+    var labels = {morning:'Morning (5am–12pm)', afternoon:'Afternoon (12–5pm)', evening:'Evening (5–9pm)', night:'Night (9pm–5am)'};
+    ['morning','afternoon','evening','night'].forEach(function(b){
+      var t = s.timeAverages[b];
+      h += statRow(labels[b], t ? t.avg.toFixed(1)+' strokes ('+t.count+' round'+(t.count===1?'':'s')+')' : '—');
+    });
     h += '</div>';
 
     h += '<button class="btn btn-ghost btn-block" id="statsBack">← Back to player list</button>';
