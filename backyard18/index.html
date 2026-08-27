@@ -998,7 +998,7 @@
     h += statRow('Par 4 average', s.par4avg!==null ? s.par4avg.toFixed(2) : '—');
     h += statRow('Par 5 average', s.par5avg!==null ? s.par5avg.toFixed(2) : '—');
     var ratioStr = s.bogeys>0 ? (s.pars/s.bogeys).toFixed(2) : (s.pars>0 ? '∞' : '—');
-    h += statRow('Par:Bogey ratio', s.pars+' : '+s.bogeys+' ('+ratioStr+')');
+    h += statRow('Par:Bogey (ratio)', s.pars+':'+s.bogeys+' ('+ratioStr+')');
     h += '</div>';
 
     h += '<div class="card">';
