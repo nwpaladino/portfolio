@@ -958,22 +958,27 @@
     h += '<th class="total">—</th></tr></thead><tbody>';
 
     h += '<tr><td class="rowlabel">Avg</td>';
+    var avgSum = 0, avgAny = false;
     holeList.forEach(function(hh){
       var ph = perHole[hh.n];
       h += '<td class="scorecell">'+(ph ? ph.avg.toFixed(1) : '–')+'</td>';
+      if(ph){ avgSum += ph.avg; avgAny = true; }
     });
-    h += '<td class="total">–</td></tr>';
+    h += '<td class="total">'+(avgAny ? avgSum.toFixed(1) : '–')+'</td></tr>';
 
     h += '<tr><td class="rowlabel">To Par</td>';
+    var toParSum = 0, toParAny = false;
     holeList.forEach(function(hh){
       var ph = perHole[hh.n];
       if(!ph){ h += '<td class="scorecell">–</td>'; return; }
       var d = ph.avgToPar;
+      toParSum += d; toParAny = true;
       var txt = (d===0?'E':(d>0?'+':''))+d.toFixed(1);
       var color = d===0 ? 'inherit' : (d<0 ? 'var(--flag)' : 'var(--navy)');
       h += '<td class="scorecell" style="color:'+color+';">'+txt+'</td>';
     });
-    h += '<td class="total">–</td></tr>';
+    var toParTotalTxt = toParAny ? (toParSum===0?'E':(toParSum>0?'+':''))+toParSum.toFixed(1) : '–';
+    h += '<td class="total">'+toParTotalTxt+'</td></tr>';
 
     h += '</tbody></table>';
     return h;
